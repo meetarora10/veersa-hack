@@ -45,7 +45,7 @@ const Navbar = () => {
                 <div className="flex justify-between items-center px-6 md:px-16 lg:px-24 py-4">
                     {/* Desktop Navigation */}
                     <nav className="hidden md:block">
-                        <ul className="flex items-center space-x-8">
+                        <ul className="flex items-center space-x-8 justify-evenly w-full">
                             <NavLinks navmod={navmod} isMobile={false} />
                             <div className='flex items-center lg:order-2'>
                                 <Link
