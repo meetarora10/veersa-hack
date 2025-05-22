@@ -26,7 +26,7 @@ function Home() {
           <img
             src={homeImg}
             alt="Home"
-            className="max-w-[400px] w-full h-auto rounded-xl  object-cover"
+            className="max-w-[500px] w-full h-auto rounded-xl  object-cover"
           />
         </div>
       </div>
