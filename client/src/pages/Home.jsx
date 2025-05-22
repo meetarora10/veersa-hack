@@ -1,4 +1,3 @@
-import React from 'react'
 import Navbar from '../components/Navbar'
 import img from '../assets/header_back2.jpg'
 function Home() {
