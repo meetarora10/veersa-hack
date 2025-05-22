@@ -1,58 +1,33 @@
 
-
-import img from '../assets/header_back2.jpg'
-
 function About() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white" style={{backgroundImage: `url(${img})`}}>
-     
-      <div className="max-w-5xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
-        <div className="mb-12 text-center">
-          <h1 className="text-4xl font-extrabold text-blue-900 mb-4">About Our Telehealth Platform</h1>
-          <p className="text-lg text-gray-600">
-            We combine technology and care to deliver fast, secure, and remote healthcare solutions.
-          </p>
-        </div>
+    <div className="min-h-screen bg-gradient-to-b from-blue-100 to-white">
+      <div className="max-w-3xl mx-auto py-20 px-6">
+        <h1 className="text-4xl font-bold mb-6 text-blue-900">About Our Telehealth Platform</h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Mission Card */}
-          <div className="bg-white rounded-2xl shadow-md p-6 hover:shadow-xl transition">
-            <h2 className="text-xl font-semibold text-blue-800 mb-3">🌍 Our Mission</h2>
-            <p className="text-gray-700">
-              Veersa Telehealth is committed to making healthcare accessible to everyone. 
-              Our platform bridges the gap between doctors and patients, ensuring quality consultation from anywhere.
-            </p>
-          </div>
+        <p className="text-lg text-gray-700 mb-4">
+          <span className="font-semibold">Veersa Telehealth</span> is an innovative platform designed to make healthcare accessible to everyone,
+          regardless of location. Our mission is to provide seamless, secure, and compassionate care through modern technology.
+        </p>
 
-          {/* Features Card */}
-          <div className="bg-white rounded-2xl shadow-md p-6 hover:shadow-xl transition">
-            <h2 className="text-xl font-semibold text-blue-800 mb-3">⚙️ Key Features</h2>
-            <ul className="list-disc list-inside text-gray-700 space-y-1">
-              <li>Instant video consultations with doctors</li>
-              <li>Secure payments via Square API</li>
-              <li>Encrypted PHI storage and access control</li>
-              <li>Real-time transcription using Deepgram or Whisper</li>
-              <li>Role-based dashboards for patients & doctors</li>
-            </ul>
-          </div>
+        <p className="text-lg text-gray-700 mb-4">
+          Whether you're in a remote area or simply looking for quick access to quality consultation, our system connects patients with certified doctors through real-time video calls, secure messaging, and encrypted health data storage.
+        </p>
 
-          {/* Technology Card */}
-          <div className="bg-white rounded-2xl shadow-md p-6 hover:shadow-xl transition">
-            <h2 className="text-xl font-semibold text-blue-800 mb-3">🛠️ Technology Stack</h2>
-            <p className="text-gray-700">
-              This platform is powered by React, Tailwind CSS, Flask, SQL, and secure APIs like Daily.co, Square, and Deepgram.
-              We prioritize both performance and security in everything we build.
-            </p>
-          </div>
+        <p className="text-lg text-gray-700 mb-4">
+          Our platform includes:
+        </p>
+        <ul className="list-disc list-inside text-gray-700 mb-6 space-y-2">
+          <li>Instant video consultations powered by Daily.co</li>
+          <li>Secure payment integration with Square</li>
+          <li>Real-time transcription using Deepgram or Whisper</li>
+          <li>Role-based dashboards for patients and doctors</li>
+          <li>Encrypted storage of PHI (Protected Health Information)</li>
+        </ul>
 
-          {/* Commitment Card */}
-          <div className="bg-white rounded-2xl shadow-md p-6 hover:shadow-xl transition">
-            <h2 className="text-xl font-semibold text-blue-800 mb-3">💙 Our Commitment</h2>
-            <p className="text-gray-700">
-              Your privacy and health are our top priorities. We ensure that all data is securely stored and every consultation is handled with care and confidentiality.
-            </p>
-          </div>
-        </div>
+        <p className="text-lg text-gray-700">
+          We’re committed to building a healthier, more connected future — one consultation at a time.
+        </p>
       </div>
     </div>
   );
