@@ -62,11 +62,11 @@ const TelehealthDashboard = () => {
 
   let content = null;
   if (activeSection === "home") {
-    content = <DashboardHome userProfile={userProfile} appointments={appointments} />;
+    content = <PatientHome userProfile={userProfile} appointments={appointments} />;
   } else if (activeSection === "appointments") {
-    content = <DashboardAppointments appointments={appointments} />;
+    content = <PatientAppointments appointments={appointments} />;
   } else if (activeSection === "profile") {
-    content = <DashboardProfile userProfile={userProfile} />;
+    content = <PatientProfile userProfile={userProfile} />;
   } else {
     content = null;
   }
