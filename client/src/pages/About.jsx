@@ -2,7 +2,7 @@ import homeImg from '../assets/about.svg'
 
 function About() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-200 via-white to-blue-50 flex flex-col items-center justify-center py-10" id='about'>
+    <div className="min-h-screen bg-gradient-to-b from-blue-200 via-white to-blue-100 flex flex-col items-center justify-center py-10" id='about'>
       <div className="max-w-7xl w-full mx-auto flex flex-col md:flex-row items-center gap-22">
         <div className="flex-1 flex justify-center mb-8 md:mb-0">
           <img

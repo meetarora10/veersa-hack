@@ -1,7 +1,6 @@
-
 function Contact() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white" id="contact">
+    <div className="min-h-screen bg-gradient-to-b from-blue-100 to-[#0e0e12]" id="contact">
       <div className="max-w-4xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-extrabold text-blue-900 mb-4">Contact Us</h1>
@@ -10,7 +9,7 @@ function Contact() {
           </p>
         </div>
 
-        <div className="bg-white shadow-lg rounded-2xl p-8">
+        <div className="bg-gradient-to-br from-blue-50 via-white/90 to-[#181824] shadow-lg rounded-2xl p-8 border border-blue-100">
           <form className="grid grid-cols-1 gap-6">
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
