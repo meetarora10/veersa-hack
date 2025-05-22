@@ -6,7 +6,7 @@ function Home() {
     <div className='bg-cover bg-center h-screen ' style={{backgroundImage: `url(${img})`}}>
 
       <Navbar />
-       <div className="flex h-[90vh]">
+       <div className="flex h-[80vh]">
         {/* Left Side - Text */}
         <div className="w-1/2 flex items-center justify-center">
           <div className="text-center">
