@@ -3,17 +3,17 @@ import homeImg from '../assets/home1.png'
 function About() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-200 via-white to-blue-50 flex flex-col items-center justify-center py-10">
-      <div className="max-w-4xl w-full mx-auto flex flex-col md:flex-row items-center gap-10 bg-white/80 rounded-2xl shadow-xl p-8 md:p-14">
+      <div className="max-w-6xl w-full mx-auto flex flex-col md:flex-row items-center gap-10">
         {/* Left: Illustration */}
         <div className="flex-1 flex justify-center mb-8 md:mb-0">
           <img
             src={homeImg}
             alt="Telehealth Illustration"
-            className="w-72 h-72 object-contain rounded-xl shadow-lg border-4 border-blue-100"
+            className="w-80 h-80 object-contain rounded-2xl shadow-2xl border-4 border-blue-100 bg-white/70"
           />
         </div>
         {/* Right: Content */}
-        <div className="flex-1">
+        <div className="flex-1 bg-white/80 rounded-2xl shadow-xl p-8 md:p-14">
           <h1 className="text-4xl md:text-5xl font-extrabold mb-6 text-blue-900 text-center md:text-left drop-shadow-lg">
             About Our Telehealth Platform
           </h1>
