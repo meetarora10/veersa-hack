@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import Sidebar from "../components/Sidebar";
 import Topbar from "../components/Topbar";
-import DashboardHome from "../components/DashboardHome";
-import DashboardAppointments from "../components/DashboardAppointments";
-import DashboardProfile from "../components/DashboardProfile";
+import DashboardHome from "../components/PatientHome";
+import DashboardAppointments from "../components/PatientAppointments";
+import DashboardProfile from "../components/PatientProfile";
 import { FiHome, FiCalendar, FiFileText, FiUser, FiLogOut } from "react-icons/fi";
 
 
