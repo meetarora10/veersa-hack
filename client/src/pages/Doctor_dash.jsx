@@ -5,7 +5,8 @@ import StatsOverview from "../components/StatsOverview";
 import UpcomingAppointments from "../components/UpcomingAppointments";
 import RecentActivity from "../components/RecentActivity";
 import DoctorProfile from "../components/DoctorProfile";
-import { FaHome, FaCalendar, FaEnvelope, FaUser, FiLogOut } from "react-icons/fa";
+import { FaHome, FaCalendar, FaEnvelope, FaUser} from "react-icons/fa";
+import { FiLogOut } from "react-icons/fi";
 
 const DoctorDashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
