@@ -31,7 +31,7 @@ function Doctors() {
               <p className="text-gray-500 text-sm">{doc.experience}</p>
               <p className="text-gray-500 text-sm">{doc.location}</p>
 
-              <div className="absolute left-0 bottom-0 w-full h-30 pointer-events-none">
+              <div className="absolute left-0 bottom-0 w-full h-10 pointer-events-none">
                 <div className="absolute left-0 bottom-[-32px] w-full h-20 flex justify-center items-end z-20
                   transition-all duration-500 ease-in-out
                   translate-y-full group-hover:translate-y-0
