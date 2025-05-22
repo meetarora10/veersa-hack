@@ -11,8 +11,8 @@ export default function Footer() {
             <span className="text-red-500 text-3xl">❤️</span>
             <h2 className="text-2xl font-bold">
               <span className="text-blue-400">Tel</span>
-              <span className="italic text-indigo-300">Med</span>
-              <span className="text-blue-400 font-bold">Sphere</span>
+              <span className="italic text-indigo-300">Hea</span>
+              <span className="text-blue-400 font-bold">lth</span>
             </h2>
           </div>
           <p className="text-sm text-gray-400">
