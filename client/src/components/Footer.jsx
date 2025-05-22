@@ -5,7 +5,6 @@ export default function Footer() {
     <footer className="bg-[#0e0e12] text-gray-200 pt-10 pb-6 px-6 sm:px-16">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10">
 
-        {/* Logo Section */}
         <div>
           <div className="flex items-center gap-2 mb-4">
             <span className="text-red-500 text-3xl">❤️</span>
@@ -19,8 +18,6 @@ export default function Footer() {
             Bringing healthcare to your fingertips with real-time access to doctors, secure data, and smart features.
           </p>
         </div>
-
-        {/* Shop & More */}
         <div>
           <h3 className="text-lg font-semibold mb-3 text-white">Shop & More</h3>
           <ul className="space-y-2 text-sm">
@@ -29,8 +26,6 @@ export default function Footer() {
             <li className="hover:underline cursor-pointer"> Book an Appointment</li>
           </ul>
         </div>
-
-        {/* Ours */}
         <div>
           <h3 className="text-lg font-semibold mb-3 text-white">Ours</h3>
           <ul className="space-y-2 text-sm">
@@ -41,8 +36,6 @@ export default function Footer() {
           </ul>
         </div>
       </div>
-
-      {/* Divider */}
       <div className="border-t border-gray-800 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center text-sm">
         <p>© 2025 . All rights reserved.</p>
         
