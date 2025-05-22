@@ -70,13 +70,5 @@
     "experience": "13 years",
     "location": "Chennai, India",
     "image": "https://randomuser.me/api/portraits/men/12.jpg"
-  },
-  {
-    "id": 10,
-    "name": "Dr. Neha Bajaj",
-    "specialty": "Psychiatrist",
-    "experience": "6 years",
-    "location": "Jaipur, India",
-    "image": "https://randomuser.me/api/portraits/women/28.jpg"
   }
 ]
