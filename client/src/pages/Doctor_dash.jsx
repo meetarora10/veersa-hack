@@ -4,6 +4,7 @@ import Topbar from "../components/Topbar";
 import StatsOverview from "../components/StatsOverview";
 import UpcomingAppointments from "../components/UpcomingAppointments";
 import RecentActivity from "../components/RecentActivity";
+import DoctorProfile from "../components/DoctorProfile";
 import { FaHome, FaCalendar, FaEnvelope, FaUser } from "react-icons/fa";
 
 const DoctorDashboard = () => {
