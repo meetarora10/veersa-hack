@@ -6,7 +6,6 @@ import Doctor_dash from "./pages/Doctor_dash";
 import { Routes, Route } from 'react-router-dom'
 function App() {
     return (
-
         <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/register" element={<Register />} />
