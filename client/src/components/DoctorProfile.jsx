@@ -17,7 +17,6 @@ const DoctorProfile = ({ userData, onUpdate }) => {
   const handleSave = () => {
     setEditMode(false);
     if (onUpdate) onUpdate(profile);
-    // Optionally, send updated profile to backend here
   };
 
   return (
