@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Sidebar from "../components/Sidebar";
 import Topbar from "../components/Topbar";
-import PatientHome from "../components/PatientHome
+import PatientHome from "../components/PatientHome";
 import PatientAppointments from "../components/PatientAppointments";
 import PatientProfile from "../components/PatientProfile";
 import { FiHome, FiCalendar, FiFileText, FiUser, FiLogOut } from "react-icons/fi";
