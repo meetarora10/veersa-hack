@@ -11,7 +11,7 @@ function Doctors() {
           {doctors.map((doc) => (
             <div
               key={doc.id}
-              className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all p-6 text-center relative overflow-hidden"
+              className="group bg-white rounded-2xl shadow-md hover:shadow-xl transition-all p-6 text-center relative overflow-hidden"
             >
               {/* Glowing ring with default classes */}
               <div className="relative w-28 h-28 mx-auto mb-4">
@@ -31,18 +31,38 @@ function Doctors() {
               <p className="text-gray-500 text-sm">{doc.experience}</p>
               <p className="text-gray-500 text-sm">{doc.location}</p>
 
-              {/* Action Icons */}
-              <div className="flex justify-center gap-5 mt-6">
-                <div className="bg-blue-600 text-white p-3 rounded-full hover:bg-blue-700 cursor-pointer shadow transition" title="Book Appointment">
-                  <FaCalendarAlt />
-                </div>
-                <div className="bg-green-600 text-white p-3 rounded-full hover:bg-green-700 cursor-pointer shadow transition" title="Hospital Profile">
-                  <FaUserMd />
-                </div>
-                <div className="bg-gray-600 text-white p-3 rounded-full hover:bg-gray-700 cursor-pointer shadow transition" title="About Doctor">
-                  <FaInfoCircle />
+              {/* Curved Overlay with Action Icons */}
+              <div className="absolute left-0 bottom-0 w-full h-32 pointer-events-none">
+                <div className="absolute left-0 bottom-[-60px] w-full h-32 flex justify-center items-end z-20
+                  transition-all duration-500 ease-in-out
+                  translate-y-full group-hover:translate-y-0
+                  pointer-events-auto
+                ">
+                  <div className="w-full h-full bg-gradient-to-t from-blue-600/90 to-blue-400/60 rounded-t-[100px] flex justify-center items-end gap-8 pb-6 shadow-lg">
+                    {/* Action Icons with ring glow */}
+                    <div className="relative group/icon">
+                      <span className="absolute inset-0 rounded-full bg-blue-300 blur-md opacity-70 animate-pulse z-0"></span>
+                      <div className="relative bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-700 cursor-pointer z-10 border-4 border-white transition">
+                        <FaCalendarAlt size={22} />
+                      </div>
+                    </div>
+                    <div className="relative group/icon">
+                      <span className="absolute inset-0 rounded-full bg-green-300 blur-md opacity-70 animate-pulse z-0"></span>
+                      <div className="relative bg-green-600 text-white p-4 rounded-full shadow-lg hover:bg-green-700 cursor-pointer z-10 border-4 border-white transition">
+                        <FaUserMd size={22} />
+                      </div>
+                    </div>
+                    <div className="relative group/icon">
+                      <span className="absolute inset-0 rounded-full bg-gray-400 blur-md opacity-70 animate-pulse z-0"></span>
+                      <div className="relative bg-gray-600 text-white p-4 rounded-full shadow-lg hover:bg-gray-700 cursor-pointer z-10 border-4 border-white transition">
+                        <FaInfoCircle size={22} />
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
+              {/* Overlay trigger area */}
+              <div className="absolute inset-0 z-10 pointer-events-auto"></div>
             </div>
           ))}
         </div>
