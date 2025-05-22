@@ -1,9 +1,7 @@
-import Navbar from '../components/Navbar';
 
 function Contact() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
-      <Navbar />
       <div className="max-w-4xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-extrabold text-blue-900 mb-4">Contact Us</h1>
