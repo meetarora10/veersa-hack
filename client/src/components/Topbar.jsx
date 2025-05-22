@@ -10,7 +10,7 @@ function PatientTopbar({ userProfile }) {
             alt="User avatar"
             className="w-10 h-10 rounded-full"
           />
-          <span className="font-medium">{userProfile.name}</span>
+          <span className="font-medium">{userProfile}</span>
         </div>
         <div className="flex items-center space-x-4">
           <button className="p-2 hover:bg-gray-100 rounded-full relative">
