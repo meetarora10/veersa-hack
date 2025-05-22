@@ -1,23 +1,23 @@
 import React, { useState, useRef } from "react";
 import { FaUserCircle, FaCamera } from "react-icons/fa";
 
-const PatientProfile = ({ userProfile, onUpdate }) => {
+const PatientProfile = ({ patientData, onUpdate }) => {
   const [editMode, setEditMode] = useState(false);
   const [profile, setProfile] = useState({
-    name: userProfile.name,
-    age: userProfile.age,
-    gender: userProfile.gender || "",
-    email: userProfile.email || "",
-    phone: userProfile.phone || "",
-    medicalConditions: userProfile.medicalConditions || [],
+    name: patientData.name,
+    age: patientData.age,
+    gender: patientData.gender || "",
+    email: patientData.email || "",
+    phone: patientData.phone || "",
+    medicalConditions: patientData.medicalConditions || [],
     emergencyContact: {
-      name: userProfile.emergencyContact?.name || "",
-      phone: userProfile.emergencyContact?.phone || "",
-      relation: userProfile.emergencyContact?.relation || "",
+      name: patientData.emergencyContact?.name || "",
+      phone: patientData.emergencyContact?.phone || "",
+      relation: patientData.emergencyContact?.relation || "",
     },
-    image: userProfile.image || null,
+    image: patientData.image || null,
   });
-  const [preview, setPreview] = useState(userProfile.image || null);
+  const [preview, setPreview] = useState(patientData.image || null);
   const fileInputRef = useRef(null);
   const [newCondition, setNewCondition] = useState("");
 

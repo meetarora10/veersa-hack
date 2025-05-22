@@ -1,44 +1,19 @@
 import os
 from flask import Flask, render_template, request, redirect, session, url_for, flash, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
-from datetime import datetime
 from flask_cors import CORS
 from dotenv import load_dotenv
+from models.user import User,db
+from routes.doctor import doctor_bp
+from routes.patient import patient_bp
 load_dotenv()
 app = Flask(__name__)
 CORS(app, supports_credentials=True, origins=['http://localhost:5173'])
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = os.getenv('SECRET_KEY')
-
-db = SQLAlchemy(app)
-
-class User(db.Model):
-    __tablename__ = 'users'
-
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(100), unique=True, nullable=False)
-    password_hash = db.Column(db.String(128), nullable=False)
-    role = db.Column(db.String(20), nullable=False)  # 'patient', 'doctor', 'admin'
-
-    # Recommended additions:
-    name = db.Column(db.String(100), nullable=False)
-    age = db.Column(db.Integer)
-    gender = db.Column(db.String(10))
-    specialization = db.Column(db.String(100), nullable=True)  # Only for doctors
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-
-    # Relationships (optional, but clean for SQLAlchemy)
-    # appointments_as_patient = db.relationship('Appointment', foreign_keys='Appointment.patient_id', backref='patient', lazy=True)
-    # appointments_as_doctor = db.relationship('Appointment', foreign_keys='Appointment.doctor_id', backref='doctor', lazy=True)
-
-    def set_password(self, password):
-        self.password_hash = generate_password_hash(password)
-
-    def check_password(self, password):
-        return check_password_hash(self.password_hash, password)
+db.init_app(app)
 # ------------------ Database Initialization ------------------ #
 def init_db():
     with app.app_context():
@@ -104,46 +79,7 @@ def login():
 
     except Exception as e:
         return jsonify({'success': False, 'message': f'Login failed: {str(e)}'}), 500
-    
-
-@app.route('/api/doctor_dashboard', methods=['GET'])
-def doctor_dashboard():
-    if 'user_id' not in session or session['role'] != 'doctor':
-        return jsonify({'success': False, 'message': 'Unauthorized access'}), 403
-
-    # Fetch doctor-specific data
-    doctor = User.query.get(session['user_id'])
-    if not doctor:
-        return jsonify({'success': False, 'message': 'Doctor not found'}), 404
-
-    # Example data to return
-    data = {
-        'name': doctor.name,
-        'age': doctor.age,
-        'gender': doctor.gender,
-        'specialization': doctor.specialization,
-        'patients': [] 
-    }
-
-    return jsonify({'success': True, 'data': data}), 200
-@app.route('/api/patient_dashboard', methods=['GET'])
-def patient_dashboard():
-    if 'user_id' not in session or session['role'] != 'patient':
-        return jsonify({'success': False, 'message': 'Unauthorized access'}), 403
-
-    # Fetch patient-specific data
-    patient = User.query.get(session['user_id'])
-    if not patient:
-        return jsonify({'success': False, 'message': 'Patient not found'}), 404
-
-    # Example data to return
-    data = {
-        'name': patient.name,
-        'age': patient.age,
-        'gender': patient.gender
-    }
-
-    return jsonify({'success': True, 'data': data}), 200
-
+app.register_blueprint(doctor_bp)
+app.register_blueprint(patient_bp)
 if __name__ == '__main__':
     app.run(debug=True)
