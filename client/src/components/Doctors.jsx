@@ -16,7 +16,7 @@ function Doctors() {
               {/* Glowing ring with default classes */}
               <div className="relative w-28 h-28 mx-auto mb-4">
                 {/* Outer animated glow ring */}
-                <div className="absolute inset-0 rounded-full bg-blue-200 blur-md opacity-60 animate-pulse z-0"></div>
+                <div className="absolute inset-0 rounded-full bg-blue-900 blur-md opacity-60 animate-pulse z-0"></div>
                 {/* Doctor image */}
                 <img
                   src={doc.image}
@@ -24,8 +24,6 @@ function Doctors() {
                   className="relative w-full h-full object-cover rounded-full border-4 border-white shadow-md z-10"
                 />
               </div>
-
-              {/* Info */}
               <h2 className="text-xl font-semibold text-blue-800 mt-2">{doc.name}</h2>
               <p className="text-gray-600">{doc.specialty}</p>
               <p className="text-gray-500 text-sm">{doc.experience}</p>
