@@ -17,7 +17,7 @@ function Home() {
               Connecting patients and doctors, no matter the distance
             </p>
             <p className="text-lg text-white drop-shadow-md">
-              we are dedicated to your wellbeing & committed to your care...
+              we are dedicated to your wellbeing & committed to your care.
             </p>
           </div>
         </div>
