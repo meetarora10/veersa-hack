@@ -1,9 +1,7 @@
-import Navbar from '../components/Navbar';
 
 function About() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-100 to-white">
-      {/* <Navbar /> */}
       <div className="max-w-3xl mx-auto py-20 px-6">
         <h1 className="text-4xl font-bold mb-6 text-blue-900">About Our Telehealth Platform</h1>
 
