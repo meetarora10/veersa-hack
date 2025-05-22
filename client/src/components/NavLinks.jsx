@@ -10,7 +10,7 @@ const navItems = [
 
 const NavLinks = ({ navmod, isMobile, onClick }) => {
   return navItems.map(({ to, label }) => (
-    <li key={to} className="text-black">
+    <li key={to} className={`flex-1 text-center text-black`}>
       <NavLink
         to={to}
         className={({ isActive }) =>
@@ -29,5 +29,6 @@ const NavLinks = ({ navmod, isMobile, onClick }) => {
     </li>
   ));
 };
+
 
 export default NavLinks;
