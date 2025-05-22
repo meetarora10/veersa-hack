@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import Topbar from "../components/Topbar";
 import StatsOverview from "../components/StatsOverview";
@@ -9,7 +9,35 @@ import { FaHome, FaCalendar, FaEnvelope, FaUser } from "react-icons/fa";
 const TelehealthDashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [activeTab, setActiveTab] = useState("home");
-  const [userRole] = useState("Doctor");
+  const [userRole, setUserRole] = useState(null);
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    // Try doctor endpoint first, then patient
+    const fetchDashboard = async () => {
+      let res = await fetch('http://localhost:5000/api/doctor_dashboard', {
+        method: 'GET',
+        credentials: 'include',
+      });
+      let data = await res.json();
+      if (data.success) {
+        setUserRole("Doctor");
+        setUserData(data.data);
+        return;
+      }
+      // Try patient if doctor fails
+      res = await fetch('http://localhost:5000/api/patient_dashboard', {
+        method: 'GET',
+        credentials: 'include',
+      });
+      data = await res.json();
+      if (data.success) {
+        setUserRole("Patient");
+        setUserData(data.data);
+      }
+    };
+    fetchDashboard();
+  }, []);
 
   const sidebarItems = [
     { id: "home", icon: <FaHome />, label: "Home" },
@@ -18,24 +46,9 @@ const TelehealthDashboard = () => {
     { id: "profile", icon: <FaUser />, label: "Profile" }
   ];
 
-  const upcomingAppointments = [
-    {
-      id: 1,
-      patientName: "John Doe",
-      dateTime: "2024-02-20 10:00 AM",
-      specialty: "Cardiology",
-      type: "Video Call",
-      status: "upcoming"
-    },
-    {
-      id: 2,
-      patientName: "Jane Smith",
-      dateTime: "2024-02-20 11:30 AM",
-      specialty: "General",
-      type: "Audio Call",
-      status: "pending"
-    }
-  ];
+  if (!userRole || !userData) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="flex h-screen bg-background dark:bg-dark-background">
@@ -50,7 +63,48 @@ const TelehealthDashboard = () => {
         <Topbar userRole={userRole} />
         <div className="p-6 overflow-auto h-[calc(100vh-4rem)]">
           <StatsOverview />
-          <UpcomingAppointments appointments={upcomingAppointments} />
+          {userRole === "Doctor" ? (
+            <>
+              <div className="mb-6">
+                <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">Doctor Dashboard</h2>
+                <div className="bg-white p-4 rounded-lg shadow-md mb-6">
+                  <h3 className="text-lg font-semibold mb-4">Profile Information</h3>
+                  <p><strong>Name:</strong> {userData.name}</p>
+                  <p><strong>Age:</strong> {userData.age}</p>
+                  <p><strong>Gender:</strong> {userData.gender}</p>
+                  <p><strong>Specialization:</strong> {userData.specialization}</p>
+                </div>
+                <div className="bg-white p-4 rounded-lg shadow-md">
+                  <h3 className="text-lg font-semibold mb-4">Patients</h3>
+                  {userData.patients && userData.patients.length > 0 ? (
+                    <ul>
+                      {userData.patients.map((patient) => (
+                        <li key={patient.id} className="border-b py-2">
+                          {patient.name} - {patient.age} years old
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p>No patients assigned.</p>
+                  )}
+                </div>
+              </div>
+              <UpcomingAppointments appointments={userData.appointments || []} />
+            </>
+          ) : (
+            <>
+              <div className="mb-6">
+                <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">Patient Dashboard</h2>
+                <div className="bg-white p-4 rounded-lg shadow-md">
+                  <h3 className="text-lg font-semibold mb-4">Profile Information</h3>
+                  <p><strong>Name:</strong> {userData.name}</p>
+                  <p><strong>Age:</strong> {userData.age}</p>
+                  <p><strong>Gender:</strong> {userData.gender}</p>
+                </div>
+              </div>
+              <UpcomingAppointments appointments={userData.appointments || []} />
+            </>
+          )}
           <RecentActivity />
         </div>
       </div>
