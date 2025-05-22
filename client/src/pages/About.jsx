@@ -6,7 +6,7 @@ function About() {
         <h1 className="text-4xl font-bold mb-6 text-blue-900">About Our Telehealth Platform</h1>
 
         <p className="text-lg text-gray-700 mb-4">
-          <span className="font-semibold">Veersa Telehealth</span> is an innovative platform designed to make healthcare accessible to everyone,
+          <span className="font-semibold">Telehealth</span> is an innovative platform designed to make healthcare accessible to everyone,
           regardless of location. Our mission is to provide seamless, secure, and compassionate care through modern technology.
         </p>
 
