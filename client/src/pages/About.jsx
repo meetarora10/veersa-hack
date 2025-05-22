@@ -1,9 +1,11 @@
-import Navbar from '../components/Navbar';
+
+
+import img from '../assets/header_back2.jpg'
 
 function About() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
-      <Navbar />
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white" style={{backgroundImage: `url(${img})`}}>
+     
       <div className="max-w-5xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
         <div className="mb-12 text-center">
           <h1 className="text-4xl font-extrabold text-blue-900 mb-4">About Our Telehealth Platform</h1>
