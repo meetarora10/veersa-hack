@@ -32,7 +32,7 @@ function Doctors() {
                   translate-y-full group-hover:translate-y-0
                   pointer-events-auto
                 ">
-                  <div className="w-full h-full bg-gradient-to-t from-blue-600/90 to-blue-400/60 rounded-t-[60px] flex justify-center items-end gap-6 pb-10 shadow-lg">
+                  <div className="w-full h-full bg-gradient-to-t from-blue-600/90 to-blue-400/90 rounded-t-[60px] flex justify-center items-end gap-6 pb-10 shadow-lg">
                     <div className="relative group/icon">
                       <span className="absolute inset-0 rounded-full bg-blue-300 blur-md opacity-70 animate-pulse z-0"></span>
                       <div className="relative bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 cursor-pointer z-10 border-4 border-white transition">
