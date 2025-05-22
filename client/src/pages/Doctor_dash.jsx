@@ -5,7 +5,7 @@ import StatsOverview from "../components/StatsOverview";
 import UpcomingAppointments from "../components/UpcomingAppointments";
 import RecentActivity from "../components/RecentActivity";
 import DoctorProfile from "../components/DoctorProfile";
-import { FaHome, FaCalendar, FaEnvelope, FaUser } from "react-icons/fa";
+import { FaHome, FaCalendar, FaEnvelope, FaUser, FiLogOut } from "react-icons/fa";
 
 const DoctorDashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -30,7 +30,8 @@ const DoctorDashboard = () => {
     { id: "home", icon: <FaHome />, label: "Home" },
     { id: "appointments", icon: <FaCalendar />, label: "Appointments" },
     { id: "messages", icon: <FaEnvelope />, label: "Messages" },
-    { id: "profile", icon: <FaUser />, label: "Profile" }
+    { id: "profile", icon: <FaUser />, label: "Profile" },
+    {id: "logout", icon: <FiLogOut/>, label: "Logout"}
   ];
 
   if (!userData) {
