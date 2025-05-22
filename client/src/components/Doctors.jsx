@@ -43,19 +43,19 @@ function Doctors() {
                     <div className="relative group/icon">
                       <span className="absolute inset-0 rounded-full bg-blue-300 blur-md opacity-70 animate-pulse z-0"></span>
                       <div className="relative bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 cursor-pointer z-10 border-4 border-white transition">
-                        <FaCalendarAlt size={20} />
+                        <FaCalendarAlt size={12} />
                       </div>
                     </div>
                     <div className="relative group/icon">
                       <span className="absolute inset-0 rounded-full bg-green-300 blur-md opacity-70 animate-pulse z-0"></span>
                       <div className="relative bg-green-600 text-white p-3 rounded-full shadow-lg hover:bg-green-700 cursor-pointer z-10 border-4 border-white transition">
-                        <FaUserMd size={20} />
+                        <FaUserMd size={12} />
                       </div>
                     </div>
                     <div className="relative group/icon">
                       <span className="absolute inset-0 rounded-full bg-gray-400 blur-md opacity-70 animate-pulse z-0"></span>
                       <div className="relative bg-gray-600 text-white p-3 rounded-full shadow-lg hover:bg-gray-700 cursor-pointer z-10 border-4 border-white transition">
-                        <FaInfoCircle size={20} />
+                        <FaInfoCircle size={12} />
                       </div>
                     </div>
                   </div>
