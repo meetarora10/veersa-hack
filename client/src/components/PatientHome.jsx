@@ -1,7 +1,7 @@
 import React from "react";
 import { format } from "date-fns";
 
-const DashboardHome = ({ userProfile, appointments }) => (
+const PatientHome = ({ userProfile, appointments }) => (
   <div className="p-6 bg-white rounded-lg shadow-lg space-y-6">
     <div className="flex items-center justify-between">
       <h2 className="text-3xl font-bold">Hi {userProfile.name} 👋</h2>
@@ -44,4 +44,4 @@ const DashboardHome = ({ userProfile, appointments }) => (
   </div>
 );
 
-export default DashboardHome;
+export default PatientHome;
