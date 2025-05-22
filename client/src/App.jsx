@@ -3,9 +3,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Patient_dash from "./pages/Patient_dash";
 import Doctor_dash from "./pages/Doctor_dash";
-
 import { Routes, Route } from 'react-router-dom'
-import TelehealthDashboard from "./pages/Dashboard";
 function App() {
     return (
 
