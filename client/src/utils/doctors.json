@@ -22,5 +22,61 @@
     "experience": "15 years",
     "location": "Bangalore, India",
     "image": "https://randomuser.me/api/portraits/men/32.jpg"
+  },
+  {
+    "id": 4,
+    "name": "Dr. Kavita Desai",
+    "specialty": "Gynecologist",
+    "experience": "10 years",
+    "location": "Pune, India",
+    "image": "https://randomuser.me/api/portraits/women/48.jpg"
+  },
+  {
+    "id": 5,
+    "name": "Dr. Rahul Gupta",
+    "specialty": "Orthopedic Surgeon",
+    "experience": "9 years",
+    "location": "Chandigarh, India",
+    "image": "https://randomuser.me/api/portraits/men/60.jpg"
+  },
+  {
+    "id": 6,
+    "name": "Dr. Anjali Nair",
+    "specialty": "Pediatrician",
+    "experience": "7 years",
+    "location": "Kochi, India",
+    "image": "https://randomuser.me/api/portraits/women/65.jpg"
+  },
+  {
+    "id": 7,
+    "name": "Dr. Deepak Rao",
+    "specialty": "ENT Specialist",
+    "experience": "11 years",
+    "location": "Hyderabad, India",
+    "image": "https://randomuser.me/api/portraits/men/21.jpg"
+  },
+  {
+    "id": 8,
+    "name": "Dr. Meena Joshi",
+    "specialty": "Oncologist",
+    "experience": "14 years",
+    "location": "Ahmedabad, India",
+    "image": "https://randomuser.me/api/portraits/women/24.jpg"
+  },
+  {
+    "id": 9,
+    "name": "Dr. Siddharth Iyer",
+    "specialty": "Urologist",
+    "experience": "13 years",
+    "location": "Chennai, India",
+    "image": "https://randomuser.me/api/portraits/men/12.jpg"
+  },
+  {
+    "id": 10,
+    "name": "Dr. Neha Bajaj",
+    "specialty": "Psychiatrist",
+    "experience": "6 years",
+    "location": "Jaipur, India",
+    "image": "https://randomuser.me/api/portraits/women/28.jpg"
   }
 ]
