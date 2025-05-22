@@ -13,11 +13,8 @@ function Doctors() {
               key={doc.id}
               className="group bg-white rounded-2xl shadow-md hover:shadow-xl transition-all p-6 text-center relative overflow-hidden"
             >
-              {/* Glowing ring with default classes */}
               <div className="relative w-28 h-28 mx-auto mb-4">
-                {/* Outer animated glow ring */}
                 <div className="absolute inset-0 rounded-full bg-blue-900 blur-md opacity-60 animate-pulse z-0"></div>
-                {/* Doctor image */}
                 <img
                   src={doc.image}
                   alt={doc.name}
