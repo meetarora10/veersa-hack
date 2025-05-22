@@ -1,20 +1,37 @@
 import Navbar from '../components/Navbar'
 import img from '../assets/header_back2.jpg'
-import homeImg from '../assets/home1.png'
+import homeImg from '../assets/home.png'
 import { useState, useEffect } from 'react'
 
-function Typewriter({ text, speed = 80 }) {
+function Typewriter({ text, speed = 80, pause = 1000 }) {
   const [displayed, setDisplayed] = useState('')
+  const [typing, setTyping] = useState(true)
 
   useEffect(() => {
-    let i = 0
-    const interval = setInterval(() => {
-      setDisplayed(text.slice(0, i + 1))
-      i++
-      if (i === text.length) clearInterval(interval)
-    }, speed)
+    let i = typing ? 0 : text.length
+    let interval
+
+    if (typing) {
+      interval = setInterval(() => {
+        setDisplayed(text.slice(0, i + 1))
+        i++
+        if (i > text.length) {
+          clearInterval(interval)
+          setTimeout(() => setTyping(false), pause)
+        }
+      }, speed)
+    } else {
+      interval = setInterval(() => {
+        setDisplayed(text.slice(0, i - 1))
+        i--
+        if (i < 0) {
+          clearInterval(interval)
+          setTimeout(() => setTyping(true), pause)
+        }
+      }, speed)
+    }
     return () => clearInterval(interval)
-  }, [text, speed])
+  }, [text, speed, typing, pause])
 
   return <span>{displayed}</span>
 }
@@ -28,7 +45,7 @@ function Home() {
         <div className="w-1/2 flex items-center justify-center">
           <div className="text-center">
             <h1 className="text-5xl font-bold mb-4 text-white drop-shadow-lg">
-              <Typewriter text="Healing Hands & Caring Hearts" />
+              <Typewriter text="Healing Hands & Caring Hearts" speed={80} pause={1200} />
             </h1>
             <p className="text-xl text-white drop-shadow-md mb-2">
               Connecting patients and doctors, no matter the distance
