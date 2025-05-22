@@ -8,7 +8,7 @@ function Sidebar({ isOpen, activeTab, setActiveTab, sidebarItems, toggleSidebar 
           onClick={toggleSidebar}
           className="text-accent dark:text-dark-accent p-2 rounded-lg hover:bg-secondary dark:hover:bg-dark-secondary"
         >
-          ≡
+          <BsLayoutSidebar />
         </button>
       </div>
       <nav>
