@@ -1,8 +1,10 @@
+import Navbar from "./components/Navbar";
+import Home from "./pages/Home";
 function App(){
     return (
         <div>
-            <h1>My React App</h1>
-            <p>This is a simple React application.</p>
+            <Home />
         </div>
     );
 }
+export default App;
