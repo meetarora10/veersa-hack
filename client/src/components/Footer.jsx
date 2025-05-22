@@ -37,7 +37,7 @@ export default function Footer() {
         </div>
       </div>
       <div className="border-t border-gray-800 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center text-sm">
-        <p>© 2025 . All rights reserved.</p>
+        <p>© 2025 Telehealth. All rights reserved.</p>
         
         {/* Social Icons */}
         <div className="flex gap-5 mt-4 md:mt-0 text-white">
