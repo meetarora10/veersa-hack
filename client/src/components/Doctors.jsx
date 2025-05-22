@@ -14,7 +14,7 @@ function Doctors() {
               className="group bg-white rounded-2xl shadow-md hover:shadow-xl transition-all p-6 text-center relative overflow-hidden"
             >
               <div className="relative w-28 h-28 mx-auto mb-4">
-                <div className="absolute inset-1 rounded-full bg-red-900 blur-md opacity-60 animate-pulse z-0"></div>
+                <div className="absolute inset-2 rounded-full bg-red-900 blur-md opacity-60 animate-pulse z-0"></div>
                 <img
                   src={doc.image}
                   alt={doc.name}
