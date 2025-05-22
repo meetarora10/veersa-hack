@@ -42,7 +42,7 @@ const Navbar = () => {
                     ? 'bg-black/40 backdrop-blur-sm'
                     : 'bg-transparent backdrop-blur-none'
                 }`}>
-                <div className="flex justify-between items-center px-6 md:px-16 lg:px-24 py-4">
+                <div className="flex justify-evenly items-center px-6 md:px-16 lg:px-24 py-4">
                     {/* Desktop Navigation */}
                     <nav className="hidden md:block">
                         <ul className="flex items-center space-x-8 justify-evenly w-full">
