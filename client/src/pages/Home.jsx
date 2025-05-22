@@ -10,9 +10,9 @@ function Home() {
         {/* Left Side - Text */}
         <div className="w-1/2 flex items-center justify-center">
           <div className="text-center">
-            <h1 className="text-5xl font-bold mb-4 text-white drop-shadow-lg">
+            <h2 className="text-5xl font-bold mb-4 text-white drop-shadow-lg">
               Healing Hands & Caring Hearts
-            </h1>
+            </h2>
             <p className="text-xl text-white drop-shadow-md mb-2">
               Connecting patients and doctors, no matter the distance
             </p>
