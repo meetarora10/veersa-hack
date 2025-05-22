@@ -1,10 +1,9 @@
-import Navbar from '../components/Navbar';
+
 import doctors from '../utils/doctors.json';
 
 function Doctors() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
-      <Navbar />
       <div className="max-w-6xl mx-auto px-4 py-16">
         <h1 className="text-4xl font-bold text-center text-blue-900 mb-10">Our Doctors</h1>
 
