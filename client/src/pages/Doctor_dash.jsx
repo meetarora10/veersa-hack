@@ -56,30 +56,7 @@ const DoctorDashboard = () => {
           <Topbar userRole="Doctor" />
           <div className="p-6 overflow-auto h-[calc(100vh-4rem)]">
             <StatsOverview />
-            <div className="mb-6">
-              <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">Doctor Dashboard</h2>
-              <div className="bg-white p-4 rounded-lg shadow-md mb-6">
-                <h3 className="text-lg font-semibold mb-4">Profile Information</h3>
-                <p><strong>Name:</strong> {userData.name}</p>
-                <p><strong>Age:</strong> {userData.age}</p>
-                <p><strong>Gender:</strong> {userData.gender}</p>
-                <p><strong>Specialization:</strong> {userData.specialization}</p>
-              </div>
-              <div className="bg-white p-4 rounded-lg shadow-md">
-                <h3 className="text-lg font-semibold mb-4">Patients</h3>
-                {userData.patients && userData.patients.length > 0 ? (
-                  <ul>
-                    {userData.patients.map((patient) => (
-                      <li key={patient.id} className="border-b py-2">
-                        {patient.name} - {patient.age} years old
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p>No patients assigned.</p>
-                )}
-              </div>
-            </div>
+            
             <UpcomingAppointments appointments={userData.appointments || []} />
             <RecentActivity />
           </div>
