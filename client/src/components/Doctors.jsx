@@ -13,7 +13,6 @@ function Doctors() {
               key={doc.id}
               className="relative group bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all p-6 text-center overflow-hidden"
             >
-              {/* Animated Image Circle */}
               <div className="relative w-28 h-28 mx-auto mb-4 rounded-full border-4 border-blue-200 group-hover:border-blue-600 transition-all duration-500">
                 <img
                   src={doc.image}
@@ -23,7 +22,6 @@ function Doctors() {
                 <div className="absolute inset-0 rounded-full animate-pulse bg-blue-100 opacity-0 group-hover:opacity-30 transition-opacity duration-500"></div>
               </div>
 
-              {/* Doctor Info */}
               <h2 className="text-xl font-semibold text-blue-800">{doc.name}</h2>
               <p className="text-gray-600">{doc.specialty}</p>
               <p className="text-gray-500 text-sm">{doc.experience}</p>
