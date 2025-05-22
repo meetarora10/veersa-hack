@@ -9,8 +9,9 @@ function App(){
         <div>
             <Home />
             <About />
-            <Contact />
             <Doctors/>
+            <Contact />
+            
         </div>
     );
 }
