@@ -7,7 +7,6 @@ function Home() {
 
       <Navbar />
        <div className="flex h-[100vh]">
-        {/* Left Side - Text */}
         <div className="w-1/2 flex items-center justify-center">
           <div className="text-left">
             <h2 className="text-5xl font-bold mb-4 text-white drop-shadow-lg">
@@ -21,7 +20,6 @@ function Home() {
             </p>
           </div>
         </div>
-        {/* Right Side - Image */}
         <div className="w-1/2 flex items-center justify-center">
           <img
             src={homeImg}
