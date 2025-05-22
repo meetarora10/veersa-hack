@@ -9,7 +9,7 @@ function About() {
           <img
             src={homeImg}
             alt="Telehealth Illustration"
-            className="w-auto h-auto object-contain rounded-2xl shadow-2xl border-4 border-blue-100 bg-white/70"
+            className="w-auto h-100 object-contain rounded-2xl shadow-2xl border-4 border-blue-100 bg-white/70"
           />
         </div>
         {/* Right: Content */}
