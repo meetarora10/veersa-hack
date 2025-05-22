@@ -24,9 +24,9 @@ export default function Footer() {
         <div>
           <h3 className="text-lg font-semibold mb-3 text-white">Shop & More</h3>
           <ul className="space-y-2 text-sm">
-            <li className="hover:underline cursor-pointer">➤ Buy Medicines</li>
-            <li className="hover:underline cursor-pointer">➤ Disease Prediction</li>
-            <li className="hover:underline cursor-pointer">➤ Book an Appointment</li>
+            <li className="hover:underline cursor-pointer"> Buy Medicines</li>
+            <li className="hover:underline cursor-pointer"> Disease Prediction</li>
+            <li className="hover:underline cursor-pointer"> Book an Appointment</li>
           </ul>
         </div>
 
@@ -34,17 +34,17 @@ export default function Footer() {
         <div>
           <h3 className="text-lg font-semibold mb-3 text-white">Ours</h3>
           <ul className="space-y-2 text-sm">
-            <li className="hover:underline cursor-pointer">➤ About Us</li>
-            <li className="hover:underline cursor-pointer">➤ Contact Us</li>
-            <li className="hover:underline cursor-pointer">➤ Rate Us</li>
-            <li className="hover:underline cursor-pointer">➤ Privacy Policies</li>
+            <li className="hover:underline cursor-pointer"> About Us</li>
+            <li className="hover:underline cursor-pointer"> Contact Us</li>
+            <li className="hover:underline cursor-pointer"> Rate Us</li>
+            <li className="hover:underline cursor-pointer"> Privacy Policies</li>
           </ul>
         </div>
       </div>
 
       {/* Divider */}
       <div className="border-t border-gray-800 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center text-sm">
-        <p>© 2025 TelMedSphere. All rights reserved.</p>
+        <p>© 2025 . All rights reserved.</p>
         
         {/* Social Icons */}
         <div className="flex gap-5 mt-4 md:mt-0 text-white">
