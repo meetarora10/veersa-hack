@@ -1,4 +1,4 @@
-import homeImg from '../assets/home1.png'
+import homeImg from '../assets/about.svg'
 
 function About() {
   return (
