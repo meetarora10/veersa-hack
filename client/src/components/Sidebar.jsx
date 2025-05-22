@@ -1,4 +1,4 @@
-import React from "react";
+import { BsLayoutSidebar } from "react-icons/bs";
 
 function Sidebar({ isOpen, activeTab, setActiveTab, sidebarItems, toggleSidebar }) {
   return (
