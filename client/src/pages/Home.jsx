@@ -1,6 +1,6 @@
 import Navbar from '../components/Navbar'
 import img from '../assets/header_back2.jpg'
-import homeImg from '../assets/home.png'
+import homeImg from '../assets/home1.png'
 import { useState, useEffect } from 'react'
 
 function Typewriter({ text, speed = 80 }) {
