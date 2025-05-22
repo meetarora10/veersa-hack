@@ -1,42 +1,74 @@
+import doctors from '../utils/doctors.json';
+import { FaCalendarAlt, FaUserMd, FaInfoCircle } from 'react-icons/fa';
 
-function Contact() {
+function Doctors() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
-      <div className="max-w-4xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-extrabold text-blue-900 mb-4">Contact Us</h1>
-          <p className="text-gray-600 text-lg">
-            Have a question, suggestion, or need support? We’d love to hear from you.
-          </p>
-        </div>
+      <div className="max-w-6xl mx-auto px-4 py-16">
+        <h1 className="text-4xl font-bold text-center text-blue-900 mb-10">Our Doctors</h1>
 
-        <div className="bg-white shadow-lg rounded-2xl p-8">
-          <form className="grid grid-cols-1 gap-6">
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
-              <input type="text" id="name" placeholder="Your full name" className="mt-1 p-3 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
-            </div>
+        <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3">
+          {doctors.map((doc) => (
+            <div
+              key={doc.id}
+              className="group bg-white rounded-2xl shadow-md hover:shadow-xl transition-all p-6 text-center relative overflow-hidden"
+            >
+              {/* Glowing ring with default classes */}
+              <div className="relative w-28 h-28 mx-auto mb-4">
+                {/* Outer animated glow ring */}
+                <div className="absolute inset-0 rounded-full bg-blue-200 blur-md opacity-60 animate-pulse z-0"></div>
+                {/* Doctor image */}
+                <img
+                  src={doc.image}
+                  alt={doc.name}
+                  className="relative w-full h-full object-cover rounded-full border-4 border-white shadow-md z-10"
+                />
+              </div>
 
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
-              <input type="email" id="email" placeholder="your@email.com" className="mt-1 p-3 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
-            </div>
+              {/* Info */}
+              <h2 className="text-xl font-semibold text-blue-800 mt-2">{doc.name}</h2>
+              <p className="text-gray-600">{doc.specialty}</p>
+              <p className="text-gray-500 text-sm">{doc.experience}</p>
+              <p className="text-gray-500 text-sm">{doc.location}</p>
 
-            <div>
-              <label htmlFor="message" className="block text-sm font-medium text-gray-700">Message</label>
-              <textarea id="message" rows="4" placeholder="Type your message here..." className="mt-1 p-3 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"></textarea>
+              {/* Curved Overlay with Action Icons */}
+              <div className="absolute left-0 bottom-0 w-full h-32 pointer-events-none">
+                <div className="absolute left-0 bottom-[-60px] w-full h-32 flex justify-center items-end z-20
+                  transition-all duration-500 ease-in-out
+                  translate-y-full group-hover:translate-y-0
+                  pointer-events-auto
+                ">
+                  <div className="w-full h-full bg-gradient-to-t from-blue-600/90 to-blue-400/60 rounded-t-[100px] flex justify-center items-end gap-8 pb-6 shadow-lg">
+                    {/* Action Icons with ring glow */}
+                    <div className="relative group/icon">
+                      <span className="absolute inset-0 rounded-full bg-blue-300 blur-md opacity-70 animate-pulse z-0"></span>
+                      <div className="relative bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-700 cursor-pointer z-10 border-4 border-white transition">
+                        <FaCalendarAlt size={22} />
+                      </div>
+                    </div>
+                    <div className="relative group/icon">
+                      <span className="absolute inset-0 rounded-full bg-green-300 blur-md opacity-70 animate-pulse z-0"></span>
+                      <div className="relative bg-green-600 text-white p-4 rounded-full shadow-lg hover:bg-green-700 cursor-pointer z-10 border-4 border-white transition">
+                        <FaUserMd size={22} />
+                      </div>
+                    </div>
+                    <div className="relative group/icon">
+                      <span className="absolute inset-0 rounded-full bg-gray-400 blur-md opacity-70 animate-pulse z-0"></span>
+                      <div className="relative bg-gray-600 text-white p-4 rounded-full shadow-lg hover:bg-gray-700 cursor-pointer z-10 border-4 border-white transition">
+                        <FaInfoCircle size={22} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {/* Overlay trigger area */}
+              <div className="absolute inset-0 z-10 pointer-events-auto"></div>
             </div>
-
-            <div className="text-right">
-              <button type="submit" className="inline-flex items-center px-6 py-3 border border-transparent text-white bg-blue-600 hover:bg-blue-700 text-base font-medium rounded-md shadow-sm transition">
-                Send Message
-              </button>
-            </div>
-          </form>
+          ))}
         </div>
       </div>
     </div>
   );
 }
 
-export default Contact;
+export default Doctors;
