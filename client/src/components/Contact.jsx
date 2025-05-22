@@ -36,11 +36,6 @@ function Contact() {
             </div>
           </form>
         </div>
-
-        <div className="text-center text-gray-500 mt-10">
-          <p>📍 Delhi, India</p>
-          <p>📧 support@veersatelehealth.com</p>
-        </div>
       </div>
     </div>
   );
