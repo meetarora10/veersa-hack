@@ -328,4 +328,4 @@ const PatientProfile = ({ userProfile, onUpdate }) => {
   );
 };
 
-export default DashboardProfile;
+export default PatientProfile;
