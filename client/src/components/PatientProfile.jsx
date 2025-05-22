@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import { FaUserCircle, FaCamera } from "react-icons/fa";
 
-const DashboardProfile = ({ userProfile, onUpdate }) => {
+const PatientProfile = ({ userProfile, onUpdate }) => {
   const [editMode, setEditMode] = useState(false);
   const [profile, setProfile] = useState({
     name: userProfile.name,
