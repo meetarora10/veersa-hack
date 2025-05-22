@@ -1,6 +1,6 @@
 import Navbar from '../components/Navbar'
 import img from '../assets/header_back2.jpg'
-import homeSvg from '../assets/home.png' 
+import homeVideo from '../assets/home.mp4' // Import your video
 
 import { useState, useEffect } from 'react';
 
@@ -37,12 +37,15 @@ function Home() {
             Empowering you with seamless healthcare solutions.
           </p>
         </div>
-        {/* Right: SVG/PNG Image */}
+        {/* Right: Video */}
         <div className="w-full md:w-1/2 min-h-[100%] flex justify-center">
-          <img
-            src={homeSvg}
-            alt="Home Illustration"
-            className="max-w-xs md:max-w-md lg:max-w-lg w-full h-auto drop-shadow-2xl"
+          <video
+            src={homeVideo}
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="max-w-xs md:max-w-md lg:max-w-lg w-full h-auto drop-shadow-2xl rounded-xl"
           />
         </div>
       </div>
