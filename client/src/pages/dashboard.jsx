@@ -1,23 +1,8 @@
 import React, { useState } from "react";
-import { FiHome, FiCalendar, FiFileText, FiUser, FiLogOut, FiBell, FiSettings, FiMenu, FiDownload, FiMessageSquare } from "react-icons/fi";
+import Sidebar from "../components/Sidebar";
+import Topbar from "../components/Topbar";
+import { FiHome, FiCalendar, FiFileText, FiUser, FiLogOut } from "react-icons/fi";
 import { format } from "date-fns";
-
-const doctors = [
-  {
-    id: 1,
-    name: "Dr. Sarah Wilson",
-    specialty: "Cardiology",
-    rating: 4.8,
-    image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2"
-  },
-  {
-    id: 2,
-    name: "Dr. James Cooper",
-    specialty: "Neurology",
-    rating: 4.9,
-    image: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d"
-  }
-];
 
 const appointments = [
   {
@@ -60,17 +45,17 @@ const userProfile = {
   }
 };
 
+const sidebarItems = [
+  { id: "home", icon: <FiHome />, label: "Home" },
+  { id: "book", icon: <FiCalendar />, label: "Book Consultation" },
+  { id: "appointments", icon: <FiFileText />, label: "Appointments" },
+  { id: "profile", icon: <FiUser />, label: "Profile" },
+  { id: "logout", icon: <FiLogOut />, label: "Logout" }
+];
+
 const TelehealthDashboard = () => {
   const [activeSection, setActiveSection] = useState("home");
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [selectedSpecialty, setSelectedSpecialty] = useState("");
-  const [consultationReason, setConsultationReason] = useState("");
-  const [selectedDate, setSelectedDate] = useState("");
-  const [paymentMethod, setPaymentMethod] = useState("");
-  const [medicalNotes, setMedicalNotes] = useState("");
-  const [activeChat, setActiveChat] = useState(null);
-
-  const specialties = ["Cardiology", "Neurology", "Pediatrics", "Dermatology"];
 
   const renderSection = () => {
     switch (activeSection) {
@@ -81,7 +66,6 @@ const TelehealthDashboard = () => {
               <h2 className="text-3xl font-bold">Hi {userProfile.name} 👋</h2>
               <div className="text-sm text-gray-600">{format(new Date(), "EEEE, MMMM d")}</div>
             </div>
-            
             <div className="bg-blue-50 p-4 rounded-lg">
               <h3 className="text-xl font-semibold mb-2">Next Appointment</h3>
               {appointments[0] && (
@@ -97,7 +81,6 @@ const TelehealthDashboard = () => {
                 </div>
               )}
             </div>
-
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="bg-green-50 p-4 rounded-lg">
                 <h4 className="font-semibold">Upcoming</h4>
@@ -119,7 +102,6 @@ const TelehealthDashboard = () => {
             </div>
           </div>
         );
-
       case "appointments":
         return (
           <div className="space-y-6">
@@ -150,7 +132,6 @@ const TelehealthDashboard = () => {
                 ))}
               </div>
             </div>
-
             <div className="p-6 bg-white rounded-lg shadow-lg">
               <h2 className="text-2xl font-semibold mb-6">Consultation History</h2>
               <div className="overflow-x-auto">
@@ -172,19 +153,19 @@ const TelehealthDashboard = () => {
                         <td className="p-4">
                           {appointment.prescription && (
                             <button className="text-blue-600 hover:text-blue-800 mr-2">
-                              <FiDownload /> Prescription
+                              Prescription
                             </button>
                           )}
                         </td>
                         <td className="p-4">
-                          {appointment.rating ? 
+                          {appointment.rating ?
                             <span className="text-yellow-500">{'★'.repeat(appointment.rating)}</span> :
                             <button className="text-blue-600 hover:text-blue-800">Rate</button>
                           }
                         </td>
                         <td className="p-4">
                           <button className="text-blue-600 hover:text-blue-800">
-                            <FiMessageSquare /> Chat
+                            Chat
                           </button>
                         </td>
                       </tr>
@@ -195,20 +176,18 @@ const TelehealthDashboard = () => {
             </div>
           </div>
         );
-
       case "profile":
         return (
           <div className="p-6 bg-white rounded-lg shadow-lg space-y-6">
             <h2 className="text-2xl font-semibold">Profile & Health Information</h2>
-            
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold">Personal Information</h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700">Name</label>
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
                       value={userProfile.name}
                       readOnly
@@ -216,8 +195,8 @@ const TelehealthDashboard = () => {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700">Age</label>
-                    <input 
-                      type="number" 
+                    <input
+                      type="number"
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
                       value={userProfile.age}
                       readOnly
@@ -225,7 +204,6 @@ const TelehealthDashboard = () => {
                   </div>
                 </div>
               </div>
-
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold">Medical Conditions</h3>
                 <div className="flex flex-wrap gap-2">
@@ -239,14 +217,13 @@ const TelehealthDashboard = () => {
                   + Add Condition
                 </button>
               </div>
-
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold">Emergency Contact</h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700">Name</label>
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
                       value={userProfile.emergencyContact.name}
                       readOnly
@@ -254,8 +231,8 @@ const TelehealthDashboard = () => {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700">Phone</label>
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
                       value={userProfile.emergencyContact.phone}
                       readOnly
@@ -266,7 +243,6 @@ const TelehealthDashboard = () => {
             </div>
           </div>
         );
-
       default:
         return null;
     }
@@ -274,55 +250,15 @@ const TelehealthDashboard = () => {
 
   return (
     <div className="flex h-screen bg-gray-100">
-      <div className={`${sidebarOpen ? "w-64" : "w-20"} bg-white shadow-lg transition-all duration-300`}>
-        <div className="p-4">
-          <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-2 hover:bg-gray-100 rounded-lg">
-            <FiMenu size={24} />
-          </button>
-        </div>
-        <nav className="mt-8">
-          {[
-            { icon: FiHome, label: "Home", id: "home" },
-            { icon: FiCalendar, label: "Book Consultation", id: "book" },
-            { icon: FiFileText, label: "Appointments", id: "appointments" },
-            { icon: FiUser, label: "Profile", id: "profile" },
-            { icon: FiLogOut, label: "Logout", id: "logout" }
-          ].map((item) => (
-            <button
-              key={item.id}
-              onClick={() => setActiveSection(item.id)}
-              className={`w-full flex items-center p-4 hover:bg-gray-100 ${activeSection === item.id ? "bg-blue-50 text-blue-600" : ""}`}
-            >
-              <item.icon size={20} />
-              {sidebarOpen && <span className="ml-4">{item.label}</span>}
-            </button>
-          ))}
-        </nav>
-      </div>
-
+      <Sidebar
+        isOpen={sidebarOpen}
+        activeTab={activeSection}
+        setActiveTab={setActiveSection}
+        sidebarItems={sidebarItems}
+        toggleSidebar={() => setSidebarOpen((prev) => !prev)}
+      />
       <div className="flex-1 overflow-auto">
-        <header className="bg-white shadow-sm">
-          <div className="flex justify-between items-center px-6 py-4">
-            <div className="flex items-center space-x-4">
-              <img
-                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e"
-                alt="User avatar"
-                className="w-10 h-10 rounded-full"
-              />
-              <span className="font-medium">{userProfile.name}</span>
-            </div>
-            <div className="flex items-center space-x-4">
-              <button className="p-2 hover:bg-gray-100 rounded-full relative">
-                <FiBell size={20} />
-                <span className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">3</span>
-              </button>
-              <button className="p-2 hover:bg-gray-100 rounded-full">
-                <FiSettings size={20} />
-              </button>
-            </div>
-          </div>
-        </header>
-
+        <Topbar userRole={userProfile.name} />
         <main className="p-6">
           {renderSection()}
         </main>
