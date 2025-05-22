@@ -39,15 +39,20 @@ const DoctorDashboard = () => {
 
   return (
     <div className="flex h-screen bg-background dark:bg-dark-background">
-      <Sidebar
-        isOpen={isSidebarOpen}
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        sidebarItems={sidebarItems}
-        toggleSidebar={() => setIsSidebarOpen((prev) => !prev)}
-      />
-      <div className="flex-1 overflow-hidden">
-        <Topbar userRole="Doctor" />
+    <Sidebar
+      isOpen={isSidebarOpen}
+      activeTab={activeTab}
+      setActiveTab={setActiveTab}
+      sidebarItems={sidebarItems}
+      toggleSidebar={() => setIsSidebarOpen((prev) => !prev)}
+    />
+    {/* Profile section */}
+    <div className="w-80 flex-shrink-0 flex items-start justify-center pt-8">
+      <DoctorProfile userData={userData} />
+    </div>
+    {/* Main content */}
+    <div className="flex-1 overflow-hidden">
+      <Topbar userRole="Doctor" />
         <div className="p-6 overflow-auto h-[calc(100vh-4rem)]">
           <StatsOverview />
           <div className="mb-6">
