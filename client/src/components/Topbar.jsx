@@ -1,6 +1,7 @@
 import { FiBell, FiSettings } from "react-icons/fi";
 
 function PatientTopbar({ userProfile }) {
+    console.log(userProfile);
   return (
     <header className="bg-white shadow-sm">
       <div className="flex justify-between items-center px-6 py-4">
