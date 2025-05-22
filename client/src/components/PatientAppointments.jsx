@@ -1,6 +1,6 @@
 import React from "react";
 
-const DashboardAppointments = ({ appointments }) => (
+const PatientAppointments = ({ appointments }) => (
   <div className="space-y-6">
     <div className="p-6 bg-white rounded-lg shadow-lg">
       <h2 className="text-2xl font-semibold mb-6">Upcoming Appointments</h2>
@@ -74,4 +74,4 @@ const DashboardAppointments = ({ appointments }) => (
   </div>
 );
 
-export default DashboardAppointments;
+export default PatientAppointments;
