@@ -4,8 +4,9 @@ import { NavLink } from "react-router-dom";
 const navItems = [
   { to: "home", label: "Home" },
   { to: "about", label: "About" },
+   { to: "doctor", label: "Doctors" },
   { to: "contact", label: "Contact" },
-  { to: "doctor", label: "Doctors" },
+ 
 ];
 
 const NavLinks = ({ navmod, isMobile, onClick }) => {
