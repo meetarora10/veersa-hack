@@ -3,7 +3,7 @@ import { FaCalendarAlt, FaUserMd, FaInfoCircle } from 'react-icons/fa';
 
 function Doctors() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white" id="doctor">
       <div className="max-w-6xl mx-auto px-4 py-16">
         <h1 className="text-4xl font-bold text-center text-blue-900 mb-10">Our Doctors</h1>
 

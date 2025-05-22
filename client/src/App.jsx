@@ -1,19 +1,21 @@
-import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
-import About from "./pages/About";
-import Contact from "./components/Contact";
-import Doctors from "./components/Doctors";
-import Footer from "./components/Footer";
-
-function App(){
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Patient_dash from "./pages/Patient_dash";
+import Doctor_dash from "./pages/Doctor_dash";
+import { Routes, Route } from 'react-router-dom'
+function App() {
     return (
-        <div>
-            <Home />
-            <About />
-            <Doctors/>
-            <Contact />
-            <Footer/>
-        </div>
+
+        <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/doctor_dashboard" element={<Doctor_dash />} />
+            <Route path="/patient_dashboard" element={<Patient_dash />} />
+
+        </Routes>
     );
 }
+
 export default App;

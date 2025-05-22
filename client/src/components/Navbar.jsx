@@ -93,28 +93,6 @@ const Navbar = () => {
                 >
                     <ul className="flex flex-col py-4 px-6 space-y-2">
                         <NavLinks navmod={navmod} isMobile={true} onClick={() => setIsNavOpen(false)} />
-                        <div className='flex items-center lg:order-2'>
-                            <Link
-                                to="#"
-                                className='bg-blue-600 text-white px-4 py-2 rounded-full font-semibold transform scale-105 shadow-md transition-all duration-300'
-                                spy={true}
-                                smooth={true}
-                                offset={50}
-                                duration={500}
-                            >
-                                Login
-                            </Link>
-                            <Link
-                                to="#"
-                                className='bg-orange-800 hover:bg-orange-300 text-white px-4 py-2 rounded-full font-semibold transform scale-105 shadow-md transition-all duration-300'
-                                spy={true}
-                                smooth={true}
-                                offset={50}
-                                duration={500}
-                            >
-                                Register
-                            </Link>
-                        </div>
                     </ul>
                 </div>
             </div>

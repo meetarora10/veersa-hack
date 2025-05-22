@@ -1,35 +1,40 @@
-// NavLinks.js
-import { NavLink } from "react-router-dom";
+import { Link as ScrollLink } from 'react-scroll';
+import { NavLink } from 'react-router-dom';
 
 const navItems = [
-  { to: "home", label: "Home" },
-  { to: "about", label: "About" },
-   { to: "doctor", label: "Doctors" },
-  { to: "contact", label: "Contact" },
- 
+  { to: "home", label: "Home", type: "scroll" },
+  { to: "about", label: "About", type: "scroll" },
+  { to: "doctor", label: "Doctors", type: "scroll" },
+  { to: "contact", label: "Contact", type: "scroll" },
+  { to: "/register", label: "Register", type: "route" },
+  { to: "/login", label: "Login", type: "route"}
 ];
 
 const NavLinks = ({ navmod, isMobile, onClick }) => {
-  return navItems.map(({ to, label }) => (
-    <li key={to} className={`flex-1 text-center text-black`}>
-      <NavLink
-        to={to}
-        className={({ isActive }) =>
-          navmod
-            ? isActive
-              ? `${isMobile ? "block" : ""} bg-blue-600 px-4 py-2 rounded-full font-semibold shadow-md transition-all duration-300`
-              : `${isMobile ? "block" : ""} text-gray-700 hover:text-blue-600 hover:bg-blue-50 px-4 py-2 rounded-full transition-all duration-300 font-medium`
-            : isActive
-            ? `${isMobile ? "block" : ""} bg-white text-blue-600 px-4 py-2 rounded-full font-semibold shadow-lg transition-all duration-300`
-            : `${isMobile ? "block" : ""} hover:text-blue-200 hover:bg-white/20 px-4 py-2 rounded-full transition-all duration-300 font-medium`
-        }
-        onClick={onClick}
-      >
-        {label}
-      </NavLink>
+  return navItems.map(({ to, label, type }) => (
+    <li key={label}>
+      {type === "scroll" ? (
+        <ScrollLink
+          to={to}
+          smooth={true}
+          duration={500}
+          offset={-70}
+          className="bg-blue-600 px-4 py-2 rounded-full font-semibold shadow-md transition-all duration-300 cursor-pointer"
+          onClick={onClick}
+        >
+          {label}
+        </ScrollLink>
+      ) : (
+        <NavLink
+          to={to}
+          className='bg-orange-800 hover:bg-orange-300 text-white px-4 py-2 rounded-full font-semibold transform scale-105 shadow-md transition-all duration-300'
+          onClick={onClick}
+        >
+          {label}
+        </NavLink>
+      )}
     </li>
   ));
 };
-
 
 export default NavLinks;
