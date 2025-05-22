@@ -38,7 +38,7 @@ function Doctors() {
                   translate-y-full group-hover:translate-y-0
                   pointer-events-auto
                 ">
-                  <div className="w-full h-full bg-gradient-to-t from-blue-600/90 to-blue-400/60 rounded-t-[60px] flex justify-center items-end gap-6 pb-10 shadow-lg">
+                  <div className="w-full h-full bg-gradient-to-t from-blue-600/90 to-blue-400/60 rounded-t-[60px] flex justify-center items-end gap-6 pb-8 shadow-lg">
                     {/* Action Icons with ring glow */}
                     <div className="relative group/icon">
                       <span className="absolute inset-0 rounded-full bg-blue-300 blur-md opacity-70 animate-pulse z-0"></span>
