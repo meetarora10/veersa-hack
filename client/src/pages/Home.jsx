@@ -38,7 +38,7 @@ function Home() {
           </p>
         </div>
         {/* Right: SVG/PNG Image */}
-        <div className="w-full md:w-1/2 flex justify-center">
+        <div className="w-full md:w-1/2 min-h[100vh] flex justify-center">
           <img
             src={homeSvg}
             alt="Home Illustration"
