@@ -47,7 +47,7 @@ const Navbar = () => {
                     <nav className="hidden md:block">
                         <ul className="flex items-center space-x-8 justify-evenly w-full">
                             <NavLinks navmod={navmod} isMobile={false} />
-                            <div className='flex items-center lg:order-2'>
+                            <div className='flex items-center ml-auto lg:order-2'>
                                 <Link
                                     to="#"
                                     className='bg-blue-800 hover:bg-blue-300 text-white px-4 py-2 rounded-full font-semibold transform scale-105 shadow-md transition-all duration-300'
