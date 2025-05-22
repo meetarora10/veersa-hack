@@ -1,31 +1,5 @@
 import Navbar from '../components/Navbar';
-
-const doctors = [
-  {
-    id: 1,
-    name: 'Dr. Arjun Mehta',
-    specialty: 'Cardiologist',
-    experience: '12 years',
-    location: 'Delhi, India',
-    image: 'https://randomuser.me/api/portraits/men/45.jpg',
-  },
-  {
-    id: 2,
-    name: 'Dr. Priya Sharma',
-    specialty: 'Dermatologist',
-    experience: '8 years',
-    location: 'Mumbai, India',
-    image: 'https://randomuser.me/api/portraits/women/50.jpg',
-  },
-  {
-    id: 3,
-    name: 'Dr. Rakesh Verma',
-    specialty: 'Neurologist',
-    experience: '15 years',
-    location: 'Bangalore, India',
-    image: 'https://randomuser.me/api/portraits/men/32.jpg',
-  },
-];
+import doctors from '../utils/doctors.json';
 
 function Doctors() {
   return (
