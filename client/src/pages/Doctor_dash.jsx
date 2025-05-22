@@ -48,7 +48,7 @@ const DoctorDashboard = () => {
       />
       {/* Show profile section only when Profile tab is active */}
       {activeTab === "profile" ? (
-        <div className="flex-1 flex items-start justify-center pt-8">
+        <div className="flex-1 flex items-center justify-center pt-8">
           <DoctorProfile userData={userData} />
         </div>
       ) : (
