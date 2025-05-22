@@ -11,7 +11,7 @@ function Home() {
         <div className="w-1/2 flex items-center justify-center">
           <div className="text-center">
             <h1 className="text-5xl font-bold mb-4 text-white drop-shadow-lg">
-              <Typewriter text="Healing Hands & Caring Hearts" speed={80} pause={1200} />
+              Healing Hands & Caring Hearts
             </h1>
             <p className="text-xl text-white drop-shadow-md mb-2">
               Connecting patients and doctors, no matter the distance
