@@ -6,33 +6,19 @@ import UpcomingAppointments from "../components/UpcomingAppointments";
 import RecentActivity from "../components/RecentActivity";
 import { FaHome, FaCalendar, FaEnvelope, FaUser } from "react-icons/fa";
 
-const TelehealthDashboard = () => {
+const DoctorDashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [activeTab, setActiveTab] = useState("home");
-  const [userRole, setUserRole] = useState(null);
   const [userData, setUserData] = useState(null);
 
   useEffect(() => {
-    // Try doctor endpoint first, then patient
     const fetchDashboard = async () => {
-      let res = await fetch('http://localhost:5000/api/doctor_dashboard', {
+      const res = await fetch('http://localhost:5000/api/doctor_dashboard', {
         method: 'GET',
         credentials: 'include',
       });
-      let data = await res.json();
+      const data = await res.json();
       if (data.success) {
-        setUserRole("Doctor");
-        setUserData(data.data);
-        return;
-      }
-      // Try patient if doctor fails
-      res = await fetch('http://localhost:5000/api/patient_dashboard', {
-        method: 'GET',
-        credentials: 'include',
-      });
-      data = await res.json();
-      if (data.success) {
-        setUserRole("Patient");
         setUserData(data.data);
       }
     };
@@ -46,7 +32,7 @@ const TelehealthDashboard = () => {
     { id: "profile", icon: <FaUser />, label: "Profile" }
   ];
 
-  if (!userRole || !userData) {
+  if (!userData) {
     return <div>Loading...</div>;
   }
 
@@ -60,51 +46,34 @@ const TelehealthDashboard = () => {
         toggleSidebar={() => setIsSidebarOpen((prev) => !prev)}
       />
       <div className="flex-1 overflow-hidden">
-        <Topbar userRole={userRole} />
+        <Topbar userRole="Doctor" />
         <div className="p-6 overflow-auto h-[calc(100vh-4rem)]">
           <StatsOverview />
-          {userRole === "Doctor" ? (
-            <>
-              <div className="mb-6">
-                <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">Doctor Dashboard</h2>
-                <div className="bg-white p-4 rounded-lg shadow-md mb-6">
-                  <h3 className="text-lg font-semibold mb-4">Profile Information</h3>
-                  <p><strong>Name:</strong> {userData.name}</p>
-                  <p><strong>Age:</strong> {userData.age}</p>
-                  <p><strong>Gender:</strong> {userData.gender}</p>
-                  <p><strong>Specialization:</strong> {userData.specialization}</p>
-                </div>
-                <div className="bg-white p-4 rounded-lg shadow-md">
-                  <h3 className="text-lg font-semibold mb-4">Patients</h3>
-                  {userData.patients && userData.patients.length > 0 ? (
-                    <ul>
-                      {userData.patients.map((patient) => (
-                        <li key={patient.id} className="border-b py-2">
-                          {patient.name} - {patient.age} years old
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p>No patients assigned.</p>
-                  )}
-                </div>
-              </div>
-              <UpcomingAppointments appointments={userData.appointments || []} />
-            </>
-          ) : (
-            <>
-              <div className="mb-6">
-                <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">Patient Dashboard</h2>
-                <div className="bg-white p-4 rounded-lg shadow-md">
-                  <h3 className="text-lg font-semibold mb-4">Profile Information</h3>
-                  <p><strong>Name:</strong> {userData.name}</p>
-                  <p><strong>Age:</strong> {userData.age}</p>
-                  <p><strong>Gender:</strong> {userData.gender}</p>
-                </div>
-              </div>
-              <UpcomingAppointments appointments={userData.appointments || []} />
-            </>
-          )}
+          <div className="mb-6">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">Doctor Dashboard</h2>
+            <div className="bg-white p-4 rounded-lg shadow-md mb-6">
+              <h3 className="text-lg font-semibold mb-4">Profile Information</h3>
+              <p><strong>Name:</strong> {userData.name}</p>
+              <p><strong>Age:</strong> {userData.age}</p>
+              <p><strong>Gender:</strong> {userData.gender}</p>
+              <p><strong>Specialization:</strong> {userData.specialization}</p>
+            </div>
+            <div className="bg-white p-4 rounded-lg shadow-md">
+              <h3 className="text-lg font-semibold mb-4">Patients</h3>
+              {userData.patients && userData.patients.length > 0 ? (
+                <ul>
+                  {userData.patients.map((patient) => (
+                    <li key={patient.id} className="border-b py-2">
+                      {patient.name} - {patient.age} years old
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>No patients assigned.</p>
+              )}
+            </div>
+          </div>
+          <UpcomingAppointments appointments={userData.appointments || []} />
           <RecentActivity />
         </div>
       </div>
@@ -112,4 +81,4 @@ const TelehealthDashboard = () => {
   );
 };
 
-export default TelehealthDashboard;
+export default DoctorDashboard;
