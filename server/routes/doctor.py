@@ -24,12 +24,35 @@ def doctor_dashboard():
 @doctor_bp.route('/api/doctors', methods=['GET'])
 def get_doctors():
     specialization = request.args.get('specialization')
+    doctor_id = request.args.get('id')
+    query = User.query.filter_by(role='doctor')
+
+    if doctor_id:
+        doctor = query.filter_by(id=doctor_id).first()
+        if not doctor:
+            return jsonify({'error': 'Doctor not found'}), 404
+        return jsonify({
+            'id': doctor.id,
+            'name': doctor.name,
+            'specialization': doctor.specialization,
+            'experience': getattr(doctor, 'experience', ''),
+            'location': getattr(doctor, 'location', ''),
+            'photoUrl': getattr(doctor, 'photoUrl', ''),
+            'price': getattr(doctor, 'price', None)
+        }), 200
+
     if specialization:
-        doctors = User.query.filter_by(role='doctor', specialization=specialization).all()
+        doctors = query.filter(
+            User.specialization.ilike(f"%{specialization}%")
+        ).all()
     else:
-        doctors = User.query.filter_by(role='doctor').all()
+        doctors = query.all()
     return jsonify([{
         'id': doctor.id,
         'name': doctor.name,
-        'specialization': doctor.specialization
+        'specialization': doctor.specialization,
+        'experience': getattr(doctor, 'experience', ''),
+        'location': getattr(doctor, 'location', ''),
+        'photoUrl': getattr(doctor, 'photoUrl', ''),
+        'price': getattr(doctor, 'price', None)
     } for doctor in doctors]), 200

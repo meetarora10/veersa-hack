@@ -7,9 +7,15 @@ from database import db
 from models.user import User
 from routes.doctor import doctor_bp
 from routes.patient import patient_bp
-# from routes.appointment import appointment_bp
+from routes.appointment import appointment_bp
+
+from routes.payment import payment_bp
+
+
 load_dotenv()
 app = Flask(__name__)
+app.register_blueprint(patient_bp, url_prefix='/api/patient', name='patient_v2')
+app.register_blueprint(payment_bp)
 CORS(app, supports_credentials=True, origins=['http://localhost:5173'])
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -74,14 +80,14 @@ def login():
             session['role'] = user.role
             session.permanent = True  # Make the session permanent
             print("after login",dict(session))
-            return jsonify({'success': True, 'message': 'Login successful', 'role': user.role}), 200
+            return jsonify({'success': True, 'message': 'Login successful','id': user.id, 'role': user.role}), 200
         else:
             return jsonify({'success': False, 'message': 'Invalid email or password'}), 401
 
     except Exception as e:
         return jsonify({'success': False, 'message': f'Login failed: {str(e)}'}), 500
 app.register_blueprint(doctor_bp)
-app.register_blueprint(patient_bp)
-# app.register_blueprint(appointment_bp)
+# app.register_blueprint(patient_bp)
+app.register_blueprint(appointment_bp, url_prefix='/api')
 if __name__ == '__main__':
     app.run(debug=True)

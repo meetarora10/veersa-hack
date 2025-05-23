@@ -1,39 +1,102 @@
-import { useEffect,useState } from 'react'
-import SearchDoctor from './SearchDoctor';
-function Patient_dash() {
-    const [patientData, setPatientData] = useState(null);
-    useEffect(() => {
-        const fetchPatientData = async () => {
-            const res = await fetch('http://localhost:5000/api/patient_dashboard', {
-                method: 'GET',
-                credentials: 'include',
-            });
-            const data = await res.json();
-            if (data.success) {
-                setPatientData(data.data);
-            } else {
-                console.error(data.message);
-            }
-        };
+import React, { useEffect, useState } from "react";
+import Sidebar from "../components/Sidebar";
+import Topbar from "../components/Topbar";
+import PatientHome from "../components/PatientHome";
+import PatientAppointments from "../components/PatientAppointments";
+import PatientProfile from "../components/PatientProfile";
+import { FiHome, FiCalendar, FiFileText, FiUser, FiSearch, FiLogOut } from "react-icons/fi";
 
-        fetchPatientData();
-    }, []);
-    if (!patientData) {
-        return <div>Loading...</div>;
-    }
+const sidebarItems = [
+  { id: "home", icon: <FiHome />, label: "Home" },
+  { id: "appointments", icon: <FiFileText />, label: "Appointments" },
+  { id: "profile", icon: <FiUser />, label: "Profile" },
+  { id: "logout", icon: <FiLogOut />, label: "Logout" }
+];
+
+const Patient_dash = () => {
+  const [activeSection, setActiveSection] = useState("home");
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [patientData, setPatientData] = useState(null);
+  const [appointments, setAppointments] = useState([]);
+
+  useEffect(() => {
+    const fetchPatientData = async () => {
+      try {
+        const res = await fetch('http://localhost:5000/api/patient/dashboard', {
+          method: 'GET',
+          credentials: 'include',
+        });
+          const data = await res.json();
+          console.log("Patient data", data);
+        if (data.success) {
+          setPatientData(data.data);
+          setAppointments(data.data.appointments || []);
+        } else {
+          setPatientData({
+            name: "Alex Johnson",
+            age: 32,
+            gender: "Male",
+            email: "alex@example.com",
+            phone: "+1 234 567 8900",
+            medicalConditions: ["Hypertension", "Asthma"],
+            emergencyContact: {
+              name: "Sarah Johnson",
+              relation: "Spouse",
+              phone: "+1 234 567 8901"
+            }
+          });
+          setAppointments([]);
+        }
+      } catch (err) {
+        setPatientData({
+          name: "Alex Johnson",
+          age: 32,
+          gender: "Male",
+          email: "alex@example.com",
+          phone: "+1 234 567 8900",
+          medicalConditions: ["Hypertension", "Asthma"],
+          emergencyContact: {
+            name: "Sarah Johnson",
+            relation: "Spouse",
+            phone: "+1 234 567 8901"
+          }
+        });
+        setAppointments([]);
+      }
+    };
+    fetchPatientData();
+  }, []);
+
+  let content = null;
+  if (!patientData) {
+    content = <div>Loading...</div>;
+  } else if (activeSection === "home") {
+    content = <PatientHome userProfile={patientData} appointments={appointments} />;
+  } else if (activeSection === "appointments") {
+    content = <PatientAppointments appointments={appointments} />;
+  } else if (activeSection === "profile") {
+    content = <PatientProfile patientData={patientData} />;
+  } else {
+    content = null;
+  }
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">Patient Dashboard</h2>
-        <div className="bg-white p-4 rounded-lg shadow-md">
-            <h3 className="text-lg font-semibold mb-4">Profile Information</h3>
-            <p><strong>Name:</strong> {patientData.name}</p>
-            <p><strong>Age:</strong> {patientData.age}</p>
-            <p><strong>Gender:</strong> {patientData.gender}</p>
-        </div>
-        <SearchDoctor/>
+    <div className="flex h-screen bg-gray-100">
+      <Sidebar
+        isOpen={sidebarOpen}
+        activeTab={activeSection}
+        setActiveTab={setActiveSection}
+        sidebarItems={sidebarItems}
+        toggleSidebar={() => setSidebarOpen((prev) => !prev)}
+      />
+      <div className="flex-1 overflow-auto">
+        <Topbar userRole={patientData ? patientData.name : "Patient"} />
+        <main className="p-6">
+          {content}
+        </main>
+      </div>
     </div>
-  )
-}
+  );
+};
 
 export default Patient_dash;

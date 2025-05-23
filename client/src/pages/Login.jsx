@@ -32,6 +32,9 @@ function Login() {
                 email: '',
                 password: '',
             })
+          if (data.id) {
+                localStorage.setItem("userId", data.id);
+            }
 
             if(data.role === 'doctor'){
                 navigate('/doctor_dashboard');

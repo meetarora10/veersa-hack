@@ -2,8 +2,8 @@ from datetime import datetime
 from database import db
 class Appointment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    patient_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    doctor_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    patient_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    doctor_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     specialty = db.Column(db.String(100), nullable=False)
     date = db.Column(db.String(50), nullable=False)
     time = db.Column(db.String(20), nullable=False)

@@ -12,13 +12,12 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(100), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
-    role = db.Column(db.String(20), nullable=False)  # 'patient', 'doctor', 'admin'
-
-    # Recommended additions:
+    role = db.Column(db.String(20), nullable=False)  
     name = db.Column(db.String(100), nullable=False)
     age = db.Column(db.Integer)
     gender = db.Column(db.String(10))
-    specialization = db.Column(db.String(100), nullable=True)  # Only for doctors
+    specialization = db.Column(db.String(100), nullable=True)
+    price = db.Column(db.Float, nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     # appointments_as_patient = db.relationship('Appointment', foreign_keys='Appointment.patient_id', backref='patient', lazy=True)
