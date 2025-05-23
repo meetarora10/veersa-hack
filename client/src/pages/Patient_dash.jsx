@@ -1,5 +1,5 @@
 import { useEffect,useState } from 'react'
-
+import SearchDoctor from './SearchDoctor';
 function Patient_dash() {
     const [patientData, setPatientData] = useState(null);
     useEffect(() => {
@@ -30,8 +30,8 @@ function Patient_dash() {
             <p><strong>Name:</strong> {patientData.name}</p>
             <p><strong>Age:</strong> {patientData.age}</p>
             <p><strong>Gender:</strong> {patientData.gender}</p>
-            
         </div>
+        <SearchDoctor/>
     </div>
   )
 }

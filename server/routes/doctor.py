@@ -1,4 +1,4 @@
-from flask import Blueprint,jsonify,session
+from flask import Blueprint,jsonify,session,request
 from models.user import User
 doctor_bp = Blueprint('doctor', __name__)
 @doctor_bp.route('/api/doctor_dashboard', methods=['GET'])
@@ -21,3 +21,15 @@ def doctor_dashboard():
     }
 
     return jsonify({'success': True, 'data': data}), 200
+@doctor_bp.route('/api/doctors', methods=['GET'])
+def get_doctors():
+    specialization = request.args.get('specialization')
+    if specialization:
+        doctors = User.query.filter_by(role='doctor', specialization=specialization).all()
+    else:
+        doctors = User.query.filter_by(role='doctor').all()
+    return jsonify([{
+        'id': doctor.id,
+        'name': doctor.name,
+        'specialization': doctor.specialization
+    } for doctor in doctors]), 200

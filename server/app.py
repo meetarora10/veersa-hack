@@ -1,12 +1,13 @@
 import os
 from flask import Flask, render_template, request, redirect, session, url_for, flash, jsonify
-from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_cors import CORS
 from dotenv import load_dotenv
-from models.user import User,db
+from database import db
+from models.user import User
 from routes.doctor import doctor_bp
 from routes.patient import patient_bp
+# from routes.appointment import appointment_bp
 load_dotenv()
 app = Flask(__name__)
 CORS(app, supports_credentials=True, origins=['http://localhost:5173'])
@@ -81,5 +82,6 @@ def login():
         return jsonify({'success': False, 'message': f'Login failed: {str(e)}'}), 500
 app.register_blueprint(doctor_bp)
 app.register_blueprint(patient_bp)
+# app.register_blueprint(appointment_bp)
 if __name__ == '__main__':
     app.run(debug=True)
