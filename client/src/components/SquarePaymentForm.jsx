@@ -4,8 +4,8 @@ import {
   GooglePay,
 } from "react-square-web-payments-sdk";
 
-const SQUARE_APP_ID = import.meta.env.VITE_SQUARE_APP_ID;
-const SQUARE_LOCATION_ID = import.meta.env.VITE_SQUARE_LOCATION_ID;
+const SQUARE_APP_ID = "sandbox-sq0idb-fG-d_cY-8ky8uunnqT0Q8A";
+const SQUARE_LOCATION_ID = "LY6DTB8DPG1GZ";
 
 export default function SquarePaymentForm({ amount, onSuccess, onError, disabled }) {
   return (
