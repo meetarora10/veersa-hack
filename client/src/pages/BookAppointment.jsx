@@ -10,7 +10,16 @@ import {
   FaUserMd,
 } from "react-icons/fa";
 import SquarePaymentForm from "../components/SquarePaymentForm";
+const getTodayDate = () => {
+  const today = new Date();
+  return today.toISOString().split("T")[0];
+};
 
+// Get current time in HH:MM format (24-hour)
+const getCurrentTime = () => {
+  const now = new Date();
+  return now.toTimeString().slice(0, 5); // HH:MM
+};
 const BookAppointment = () => {
   const { doctorId } = useParams();
   const navigate = useNavigate();
@@ -112,6 +121,7 @@ const BookAppointment = () => {
             onChange={handleChange}
             className="w-full focus:outline-none bg-transparent"
             required
+            min={getTodayDate()} // Prevent past dates
           />
         </div>
       </div>
@@ -129,6 +139,7 @@ const BookAppointment = () => {
             onChange={handleChange}
             className="w-full focus:outline-none bg-transparent"
             required
+            min={formData.date === getTodayDate() ? getCurrentTime() : undefined} // Prevent past times on today
           />
         </div>
       </div>
@@ -190,6 +201,7 @@ const BookAppointment = () => {
       const res = await axios.post("http://localhost:5000/api/appointments", {
         ...formData,
         patient_id,
+        doctor_id: doctor.id,
         payment_status: 'completed', 
         amount: doctor.price
       });

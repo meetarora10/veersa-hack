@@ -43,8 +43,8 @@ function Home() {
     <>
       <div
         id="home"
-        className="relative bg-cover bg-center min-h-screen flex flex-col"
-        style={{ backgroundImage: `url(${img})` }}
+        className="relative bg-gradient-to-b from-blue-100 to-blue-200 bg-cover bg-center min-h-screen flex flex-col"
+        // style={{ backgroundImage: `url(${img})` }}
       >
         <Navbar />
         <div className="absolute inset-0 bg-gradient-to-br from-black/30 via-black/20 to-white/5 z-10" />

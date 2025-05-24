@@ -1,5 +1,6 @@
+// 
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,Link } from 'react-router-dom';
 const Register = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -96,6 +97,7 @@ const Register = () => {
             name="age"
             value={formData.age}
             onChange={handleChange}
+            min={formData.role === 'doctor' ? 20 : 1} // Doctors must be at least 20 years old
             required
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           />
@@ -197,6 +199,9 @@ const Register = () => {
         >
           Register
         </button>
+        <p className="mt-4 text-sm text-gray-600 text-center">
+          Already have an account? <Link to="/login" className="text-blue-600 hover:underline">Login</Link>
+        </p>
       </div>
     </div>
   );

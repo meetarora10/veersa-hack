@@ -1,5 +1,6 @@
 from flask import Blueprint,jsonify,session,request
 from models.user import User
+from models.appointment import Appointment
 doctor_bp = Blueprint('doctor', __name__)
 @doctor_bp.route('/api/doctor_dashboard', methods=['GET'])
 def doctor_dashboard():
@@ -12,15 +13,27 @@ def doctor_dashboard():
         return jsonify({'success': False, 'message': 'Doctor not found'}), 404
 
     # Example data to return
+    # Fetch appointments for this doctor
+    appointments_data=[]
+    appointments = Appointment.query.filter_by(doctor_id=doctor.id).all()
+    for appt in appointments:
+        patient = User.query.get(appt.patient_id)
+        appointments_data.append({
+            'id': appt.id,
+            'patient': patient.name if patient else "",
+            'date': appt.date,
+            'time': appt.time,
+            'status': appt.status,
+        })
     data = {
         'name': doctor.name,
         'age': doctor.age,
         'gender': doctor.gender,
         'specialization': doctor.specialization,
-        'patients': [] 
+        'appointments': appointments_data,
     }
-
     return jsonify({'success': True, 'data': data}), 200
+
 @doctor_bp.route('/api/doctors', methods=['GET'])
 def get_doctors():
     specialization = request.args.get('specialization')
