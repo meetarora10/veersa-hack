@@ -4,4 +4,5 @@ Flask-SQLAlchemy
 Flask-Migrate
 Flask-JWT-Extended
 dotenv
-squareup
+git+https://github.com/square/square-python-sdk.git#egg=square
+

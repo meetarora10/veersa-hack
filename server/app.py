@@ -1,4 +1,5 @@
 import os
+import requests
 from flask import Flask, render_template, request, redirect, session, url_for, flash, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_cors import CORS
@@ -20,6 +21,7 @@ CORS(app, supports_credentials=True, origins=['http://localhost:5173'])
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = os.getenv('SECRET_KEY')
+DAILY_API_KEY = os.environ.get('DAILY_API_KEY')
 db.init_app(app)
 # ------------------ Database Initialization ------------------ #
 def init_db():
@@ -70,7 +72,7 @@ def login():
         data = request.get_json()
         email = data.get('email')
         password = data.get('password')
-
+        
         if not email or not password:
             return jsonify({'success': False, 'message': 'Email and password are required'}), 400
 
@@ -87,7 +89,22 @@ def login():
     except Exception as e:
         return jsonify({'success': False, 'message': f'Login failed: {str(e)}'}), 500
 app.register_blueprint(doctor_bp)
-# app.register_blueprint(patient_bp)
 app.register_blueprint(appointment_bp, url_prefix='/api')
+@app.route('/api/create-room', methods=['GET'])
+def create_room():
+    url = "https://api.daily.co/v1/rooms"
+    headers = {
+        "Authorization": f"Bearer {DAILY_API_KEY}",
+        "Content-Type": "application/json"
+    }
+    data = {
+        "properties": {
+            "enable_chat": True,
+            "start_video_off": False,
+            "start_audio_off": False
+        }
+    }
+    response = requests.post(url, headers=headers, json=data)
+    return jsonify(response.json())
 if __name__ == '__main__':
     app.run(debug=True)
