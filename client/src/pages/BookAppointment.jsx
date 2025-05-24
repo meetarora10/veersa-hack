@@ -23,9 +23,10 @@ const BookAppointment = () => {
     date: "",
     time: "",
   });
-  const [step, setStep] = useState("details"); // "details" | "payment" | "confirm"
+  const [step, setStep] = useState("details");
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [paymentError, setPaymentError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   // Fetch doctor info
   useEffect(() => {
@@ -150,49 +151,87 @@ const BookAppointment = () => {
 
   // Step 2: Payment Form
   const renderPaymentForm = () => (
-    <div>
-      <SquarePaymentForm
-        amount={doctor.price}
-        onSuccess={() => {
-          setPaymentSuccess(true);
-          setPaymentError("");
-          setStep("confirm");
-        }}
-        onError={setPaymentError}
-        disabled={false}
-      />
-      {paymentError && (
-        <div className="text-red-600 text-sm mb-2">{paymentError}</div>
-      )}
-    </div>
-  );
+  <div>
+    <SquarePaymentForm
+      amount={doctor.price}
+      onSuccess={() => {
+        setPaymentSuccess(true);
+        setPaymentError("");
+        setStep("confirm");
+      }}
+      onError={(error) => {
+        setPaymentError(error);
+        setPaymentSuccess(false);
+      }}
+      disabled={isLoading}
+    />
+    {paymentError && (
+      <div className="text-red-600 text-sm mt-2 p-2 bg-red-50 border border-red-200 rounded">
+        {paymentError}
+      </div>
+    )}
+  </div>
+);
 
   // Step 3: Confirm Booking
   const handleBook = async (e) => {
     e.preventDefault();
+    
+    // Validate payment was successful before proceeding
+    if (!paymentSuccess) {
+      alert("Please complete payment before confirming booking");
+      setStep("payment");
+      return;
+    }
+
+    setIsLoading(true);
+    
     try {
       const res = await axios.post("http://localhost:5000/api/appointments", {
         ...formData,
         patient_id,
+        payment_status: 'completed', 
+        amount: doctor.price
       });
-      alert(res.data.message);
-      navigate("/patient_dashboard");
+      
+      if (res.data.success) {
+        alert(res.data.message || "Booking confirmed successfully!");
+        navigate("/patient_dashboard");
+      } else {
+        throw new Error(res.data.error || "Booking failed");
+      }
     } catch (err) {
-      alert("Booking failed");
-      console.error(err);
+  console.error("Booking error:", err, err.response?.data);
+  alert("Booking failed: " + (err.response?.data?.error || err.message || "Unknown error"));
+  setPaymentSuccess(false);
+  setStep("payment");
+} finally {
+      setIsLoading(false);
     }
   };
 
   const renderConfirm = () => (
     <form onSubmit={handleBook} className="space-y-6">
-      <div className="text-green-700 font-semibold text-center mb-2">
-        Payment successful!
+      {paymentSuccess && (
+        <div className="text-green-700 font-semibold text-center mb-2 p-3 bg-green-50 border border-green-200 rounded">
+          ✓ Payment successful!
+        </div>
+      )}
+      
+      {/* Display booking summary */}
+      <div className="bg-gray-50 p-4 rounded-lg">
+        <h3 className="font-semibold mb-2">Booking Summary</h3>
+        <p>Doctor: {doctor.name}</p>
+        <p>Amount: ₹{doctor.price}</p>
+        {/* Add other booking details */}
       </div>
+      
       <button
         type="submit"
-        className="w-full bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white py-2 rounded-lg font-semibold shadow transition-all"
+        disabled={isLoading || !paymentSuccess}
+        className="w-full bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white py-2 rounded-lg font-semibold shadow transition-all disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        Confirm Booking
+        {isLoading ? "Confirming..." : "Confirm Booking"}
       </button>
     </form>
   );
@@ -253,9 +292,11 @@ const BookAppointment = () => {
         )}
 
         {/* Step-based rendering */}
-        {step === "details" && renderDetailsForm()}
-        {step === "payment" && renderPaymentForm()}
-        {step === "confirm" && renderConfirm()}
+        <div className="booking-container">
+          {step === "details" && renderDetailsForm()}
+          {step === "payment" && renderPaymentForm()}
+          {step === "confirm" && renderConfirm()}
+        </div>
       </div>
     </div>
   );

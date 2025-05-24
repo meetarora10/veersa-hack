@@ -28,4 +28,5 @@ def book_appointment():
     db.session.add(appointment)
     db.session.commit()
 
-    return jsonify({"message": "Appointment booked successfully!"}), 201
+    return jsonify({"success": True, "message": "Appointment booked successfully!"}), 201
+

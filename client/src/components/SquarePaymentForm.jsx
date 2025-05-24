@@ -1,145 +1,58 @@
-import { useEffect, useRef, useState } from "react";
+import {
+  PaymentForm,
+  CreditCard,
+  GooglePay,
+} from "react-square-web-payments-sdk";
 
 const SQUARE_APP_ID = import.meta.env.VITE_SQUARE_APP_ID;
 const SQUARE_LOCATION_ID = import.meta.env.VITE_SQUARE_LOCATION_ID;
 
 export default function SquarePaymentForm({ amount, onSuccess, onError, disabled }) {
-  const paymentsRef = useRef(null);
-  const cardInstanceRef = useRef(null);
-  const googlePayRef = useRef(null);
-  const [googlePayAvailable, setGooglePayAvailable] = useState(false);
-
-  function buildPaymentRequest() {
-    return {
-      countryCode: "IN",
-      currencyCode: "INR",
-      total: {
-        amount: amount.toString(),
-        label: "Total",
-      },
-    };
-  }
-
-  async function initializeGooglePay(payments) {
-    try {
-      // Check if Google Pay is available
-      const canUseGooglePay = await payments.canUse("googlePay");
-        if (!canUseGooglePay) {
-            console.log("no");
-        setGooglePayAvailable(false);
-        return;
-      }
-      setGooglePayAvailable(true);
-
-      const paymentRequest = await payments.paymentRequest(buildPaymentRequest());
-      const googlePay = await payments.googlePay(paymentRequest);
-      await googlePay.attach("#google-pay-button", { buttonColor: "default", buttonType: "long" });
-      googlePayRef.current = googlePay;
-
-      const googlePayButton = document.getElementById("google-pay-button");
-      googlePayButton.onclick = async () => {
+  return (
+    <PaymentForm
+      applicationId={SQUARE_APP_ID}
+      locationId={SQUARE_LOCATION_ID}
+      cardTokenizeResponseReceived={async (token, buyer) => {
         try {
-          const tokenResult = await googlePay.tokenize();
-          if (tokenResult.status === "OK") {
-            await processPayment(tokenResult.token);
+          const res = await fetch("http://localhost:5000/api/pay", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ sourceId: token.token, amount }),
+          });
+          const data = await res.json();
+          if (data.success) {
+            onSuccess();
           } else {
-            onError("Google Pay payment failed.");
+            onError(data.error || "Payment failed.");
           }
         } catch (err) {
-          onError("Google Pay error.");
+          onError("Payment request failed.");
         }
-      };
-    } catch (error) {
-      setGooglePayAvailable(false);
-    }
-  }
-
-  useEffect(() => {
-    // Clean up containers before initializing
-    document.getElementById("card-container")?.replaceChildren();
-    document.getElementById("google-pay-button")?.replaceChildren();
-
-    if (!window.Square || !amount) {
-      return;
-    }
-
-    let isMounted = true;
-
-    async function initializeSquare() {
-      try {
-        const payments = window.Square.payments(SQUARE_APP_ID, SQUARE_LOCATION_ID);
-        paymentsRef.current = payments;
-
-        // Card
-        const card = await payments.card();
-        await card.attach("#card-container");
-        cardInstanceRef.current = card;
-
-        // Google Pay
-        await initializeGooglePay(payments);
-      } catch (e) {
-        if (isMounted) onError("Failed to load payment options.");
-      }
-    }
-
-    initializeSquare();
-
-    return () => {
-      isMounted = false;
-      document.getElementById("card-container")?.replaceChildren();
-      document.getElementById("google-pay-button")?.replaceChildren();
-    };
-  }, [SQUARE_APP_ID, SQUARE_LOCATION_ID, amount]);
-
-  const handleCardPayment = async (e) => {
-    e.preventDefault();
-
-    if (!cardInstanceRef.current) {
-      onError("Card payment form is not ready.");
-      return;
-    }
-
-    try {
-      const result = await cardInstanceRef.current.tokenize();
-      if (result.status !== "OK") {
-        onError("Card payment failed.");
-        return;
-      }
-      await processPayment(result.token);
-    } catch (err) {
-      onError("Card processing error.");
-    }
-  };
-
-  async function processPayment(token) {
-    try {
-      const res = await fetch("/api/pay", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ sourceId: token, amount }),
-      });
-      const data = await res.json();
-      if (data.success) {
-        onSuccess();
-      } else {
-        onError(data.error || "Payment failed.");
-      }
-    } catch (err) {
-      onError("Payment request failed.");
-    }
-  }
-
-  return (
-    <form onSubmit={handleCardPayment} className="space-y-4">
-      <div id="google-pay-button" className="mb-4 cursor-pointer" />
-      <div id="card-container" className="mb-4" />
-      <button
-        type="submit"
-        disabled={disabled}
-        className="w-full bg-green-600 text-white py-2 rounded font-semibold"
-      >
-        Pay ₹{amount}
-      </button>
-    </form>
+      }}
+      createPaymentRequest={() => ({
+        countryCode: "IN",
+        currencyCode: "INR",
+        total: {
+          amount: amount.toString(),
+          label: "Total",
+        },
+        requestBillingContact: true,
+        requestShippingContact: false,
+      })}
+      style={{ maxWidth: 400, margin: "0 auto" }}
+    >
+      <GooglePay
+        buttonColor="black"
+        buttonType="long"
+      />
+      <div className="my-4" />
+      <CreditCard
+        buttonProps={{
+          disabled,
+          className:
+            "w-full bg-green-600 text-white py-2 rounded font-semibold",
+        }}
+      />
+    </PaymentForm>
   );
 }

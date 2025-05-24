@@ -4,11 +4,7 @@ import SearchDoctor from "../pages/SearchDoctor";
 
 const PatientHome = ({ userProfile, appointments }) => {
   const now = new Date();
-  const nextAppointment = appointments
-    .filter(a => {
-      const apptDateTime = new Date(`${a.date}T${a.time}`);
-      return isAfter(apptDateTime, now) || (isToday(apptDateTime) && isAfter(addMinutes(apptDateTime, 1), now));
-    })
+    const nextAppointment = appointments
     .sort((a, b) => new Date(`${a.date}T${a.time}`) - new Date(`${b.date}T${b.time}`))[0];
 
   let joinEnabled = false;
