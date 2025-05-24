@@ -24,10 +24,8 @@ const BookAppointment = () => {
     time: "",
   });
   const [step, setStep] = useState("details");
-  const [step, setStep] = useState("details");
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [paymentError, setPaymentError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   // Fetch doctor info
@@ -174,41 +172,10 @@ const BookAppointment = () => {
     )}
   </div>
 );
-  <div>
-    <SquarePaymentForm
-      amount={doctor.price}
-      onSuccess={() => {
-        setPaymentSuccess(true);
-        setPaymentError("");
-        setStep("confirm");
-      }}
-      onError={(error) => {
-        setPaymentError(error);
-        setPaymentSuccess(false);
-      }}
-      disabled={isLoading}
-    />
-    {paymentError && (
-      <div className="text-red-600 text-sm mt-2 p-2 bg-red-50 border border-red-200 rounded">
-        {paymentError}
-      </div>
-    )}
-  </div>
-);
 
   // Step 3: Confirm Booking
   const handleBook = async (e) => {
     e.preventDefault();
-    
-    // Validate payment was successful before proceeding
-    if (!paymentSuccess) {
-      alert("Please complete payment before confirming booking");
-      setStep("payment");
-      return;
-    }
-
-    setIsLoading(true);
-    
     
     // Validate payment was successful before proceeding
     if (!paymentSuccess) {
@@ -226,13 +193,6 @@ const BookAppointment = () => {
         payment_status: 'completed', 
         amount: doctor.price
       });
-      
-      if (res.data.success) {
-        alert(res.data.message || "Booking confirmed successfully!");
-        navigate("/patient_dashboard");
-      } else {
-        throw new Error(res.data.error || "Booking failed");
-      }
       
       if (res.data.success) {
         alert(res.data.message || "Booking confirmed successfully!");
@@ -264,29 +224,13 @@ const BookAppointment = () => {
         <p>Doctor: {doctor.name}</p>
         <p>Amount: ₹{doctor.price}</p>
         {/* Add other booking details */}
-      {paymentSuccess && (
-        <div className="text-green-700 font-semibold text-center mb-2 p-3 bg-green-50 border border-green-200 rounded">
-          ✓ Payment successful!
-        </div>
-      )}
-      
-      {/* Display booking summary */}
-      <div className="bg-gray-50 p-4 rounded-lg">
-        <h3 className="font-semibold mb-2">Booking Summary</h3>
-        <p>Doctor: {doctor.name}</p>
-        <p>Amount: ₹{doctor.price}</p>
-        {/* Add other booking details */}
       </div>
-      
       
       <button
         type="submit"
         disabled={isLoading || !paymentSuccess}
         className="w-full bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white py-2 rounded-lg font-semibold shadow transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-        disabled={isLoading || !paymentSuccess}
-        className="w-full bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white py-2 rounded-lg font-semibold shadow transition-all disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        {isLoading ? "Confirming..." : "Confirm Booking"}
         {isLoading ? "Confirming..." : "Confirm Booking"}
       </button>
     </form>
@@ -348,11 +292,6 @@ const BookAppointment = () => {
         )}
 
         {/* Step-based rendering */}
-        <div className="booking-container">
-          {step === "details" && renderDetailsForm()}
-          {step === "payment" && renderPaymentForm()}
-          {step === "confirm" && renderConfirm()}
-        </div>
         <div className="booking-container">
           {step === "details" && renderDetailsForm()}
           {step === "payment" && renderPaymentForm()}
