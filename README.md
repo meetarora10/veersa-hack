@@ -64,7 +64,7 @@ MediBridge offers:
 ---
 
 ## Screenshots
-![image](https://github.com/user-attachments/assets/404461e5-39e3-410a-914b-9ae65ea6ea1b)
+![Screenshot (410)](https://github.com/user-attachments/assets/278b7b45-251a-49c3-a9a9-9df19f05ba7b)
 Sign Up
 ![image](https://github.com/user-attachments/assets/6e24b810-c42d-40f8-ba94-81c2e5316844)
 Login
