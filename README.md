@@ -2,6 +2,9 @@
 
 A digitally enabled telehealth platform that ensures **instant, secure, and affordable healthcare consultations**, especially for rural and remote regions.
 
+
+**Figma**  -  https://www.figma.com/design/mOjnU0RF2knuZHxp09j5YK/Untitled?node-id=0-1&t=ooAPCQ7Uc4Kt029n-1
+
 ---
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
