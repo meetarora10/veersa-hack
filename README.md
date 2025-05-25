@@ -60,22 +60,6 @@ MediBridge offers:
 
 ---
 
-## 📁 Folder Structure
-
-veersa-hack/
-│
-├── client/ # React frontend
-│ └── src/components # UI components (Auth, Booking, Payment)
-│
-├── server/ # Node.js backend
-│ ├── models/ # SQLite schema
-│ ├── routes/ # API routes
-│ └── controllers/ # Route logic
-│
-├── model/ # ML models and chatbot (WIP)
-├── model_chatbot_use.ipynb # Chatbot notebook demo
-└── README.md # Project documentation
-
 
 ## 🔮 Future Scope
 -📱 Mobile App Integration (Android/iOS)
