@@ -36,7 +36,7 @@ const BookAppointment = () => {
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [paymentError, setPaymentError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
+  const [availableSlots, setAvailableSlots] = useState([]);
   // Fetch doctor info
   useEffect(() => {
     const fetchDoctor = async () => {
@@ -61,8 +61,32 @@ const BookAppointment = () => {
       }
     };
     fetchDoctor();
+    
   }, [doctorId]);
+  useEffect(() => {
+  // Fetch available slots when date changes
+  const fetchSlots = async () => {
+    if (!formData.date) return;
 
+    try {
+      const res = await axios.get(
+        `http://localhost:5000/api/available_slots?doctor_id=${doctorId}&date=${formData.date}`
+      );
+      if (res.data.success && res.data.available_slots.length > 0) {
+        setAvailableSlots(res.data.available_slots);
+      } else {
+        setAvailableSlots([]);
+        alert("No available slots for this date");
+        console.log("No available slots:", res.data.error);
+      }
+    } catch (err) {
+      setAvailableSlots([]);
+      console.error("Error fetching slots:", err);
+    }
+  };
+
+  fetchSlots();
+}, [formData.date, doctorId]);
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -131,17 +155,20 @@ const BookAppointment = () => {
           Time
         </label>
         <div className="flex items-center border rounded-lg px-3 py-2 shadow-sm bg-gray-50">
-          <FaClock className="text-gray-500 mr-2" />
-          <input
-            name="time"
-            type="time"
-            value={formData.time}
-            onChange={handleChange}
-            className="w-full focus:outline-none bg-transparent"
-            required
-            min={formData.date === getTodayDate() ? getCurrentTime() : undefined} // Prevent past times on today
-          />
-        </div>
+            <FaClock className="text-gray-500 mr-2" />
+            <select
+              name="time"
+              value={formData.time}
+              onChange={handleChange}
+              required
+              className="w-full border px-3 py-2 rounded-lg shadow-sm bg-gray-50"
+            >
+              <option value="">Select a time slot</option>
+              {availableSlots.map((slot, idx) => (
+                <option key={idx} value={slot}>{slot}</option>
+              ))}
+            </select>
+          </div>
       </div>
       {/* Pay Button */}
       <button
@@ -162,32 +189,32 @@ const BookAppointment = () => {
 
   // Step 2: Payment Form
   const renderPaymentForm = () => (
-  <div>
-    <SquarePaymentForm
-      amount={doctor.price}
-      onSuccess={() => {
-        setPaymentSuccess(true);
-        setPaymentError("");
-        setStep("confirm");
-      }}
-      onError={(error) => {
-        setPaymentError(error);
-        setPaymentSuccess(false);
-      }}
-      disabled={isLoading}
-    />
-    {paymentError && (
-      <div className="text-red-600 text-sm mt-2 p-2 bg-red-50 border border-red-200 rounded">
-        {paymentError}
-      </div>
-    )}
-  </div>
-);
+    <div>
+      <SquarePaymentForm
+        amount={doctor.price}
+        onSuccess={() => {
+          setPaymentSuccess(true);
+          setPaymentError("");
+          setStep("confirm");
+        }}
+        onError={(error) => {
+          setPaymentError(error);
+          setPaymentSuccess(false);
+        }}
+        disabled={isLoading}
+      />
+      {paymentError && (
+        <div className="text-red-600 text-sm mt-2 p-2 bg-red-50 border border-red-200 rounded">
+          {paymentError}
+        </div>
+      )}
+    </div>
+  );
 
   // Step 3: Confirm Booking
   const handleBook = async (e) => {
     e.preventDefault();
-    
+
     // Validate payment was successful before proceeding
     if (!paymentSuccess) {
       alert("Please complete payment before confirming booking");
@@ -196,16 +223,16 @@ const BookAppointment = () => {
     }
 
     setIsLoading(true);
-    
+
     try {
       const res = await axios.post("http://localhost:5000/api/appointments", {
         ...formData,
         patient_id,
         doctor_id: doctor.id,
-        payment_status: 'completed', 
+        payment_status: 'completed',
         amount: doctor.price
       });
-      
+
       if (res.data.success) {
         alert(res.data.message || "Booking confirmed successfully!");
         navigate("/patient_dashboard");
@@ -213,11 +240,11 @@ const BookAppointment = () => {
         throw new Error(res.data.error || "Booking failed");
       }
     } catch (err) {
-  console.error("Booking error:", err, err.response?.data);
-  alert("Booking failed: " + (err.response?.data?.error || err.message || "Unknown error"));
-  setPaymentSuccess(false);
-  setStep("payment");
-} finally {
+      console.error("Booking error:", err, err.response?.data);
+      alert("Booking failed: " + (err.response?.data?.error || err.message || "Unknown error"));
+      setPaymentSuccess(false);
+      setStep("payment");
+    } finally {
       setIsLoading(false);
     }
   };
@@ -229,7 +256,7 @@ const BookAppointment = () => {
           ✓ Payment successful!
         </div>
       )}
-      
+
       {/* Display booking summary */}
       <div className="bg-gray-50 p-4 rounded-lg">
         <h3 className="font-semibold mb-2">Booking Summary</h3>
@@ -237,7 +264,7 @@ const BookAppointment = () => {
         <p>Amount: ₹{doctor.price}</p>
         {/* Add other booking details */}
       </div>
-      
+
       <button
         type="submit"
         disabled={isLoading || !paymentSuccess}

@@ -1,6 +1,9 @@
 from flask import Blueprint,jsonify,session,request
 from models.user import User
 from models.appointment import Appointment
+# from models.doctor_schedule import DoctorSchedule
+from models.schedule import Schedule
+from datetime import datetime
 doctor_bp = Blueprint('doctor', __name__)
 @doctor_bp.route('/api/doctor_dashboard', methods=['GET'])
 def doctor_dashboard():
@@ -33,7 +36,37 @@ def doctor_dashboard():
         'appointments': appointments_data,
     }
     return jsonify({'success': True, 'data': data}), 200
-
+@doctor_bp.route('/api/available_slots', methods=['GET'])
+def get_available_slots():
+    # if 'user_id' not in session or session['role'] != 'doctor':
+    #     return jsonify({'success': False, 'message': 'Unauthorized access'}), 403
+    doctor_id = request.args.get('doctor_id')
+    date = request.args.get('date')
+    try:
+        doctor_id = int(doctor_id) if doctor_id else None
+    except ValueError:
+        return jsonify({'success': False, 'message': 'Invalid doctor ID format'}), 400
+    if not doctor_id or not date:
+        return jsonify({'success': False, 'message': 'Doctor ID and date are required'}), 400
+    print("doctor_id",doctor_id)
+    print("date",date)
+    # Fetch the doctor's schedule for the given date
+    try:
+        day = datetime.strptime(date, '%Y-%m-%d').strftime('%A')
+        # to get all the available sots for that day
+        availability = Schedule.query.filter_by(doctor_id=doctor_id, day=day).all()
+        # to get the booked appointment
+        booked_appointments = Appointment.query.filter_by(doctor_id=doctor_id, date=date).all()
+        # extract time from both availabilty and booked appointments
+        available_slots = [slot.time_slot for slot in availability]
+        booked_slots = [appt.time for appt in booked_appointments]
+        # remove booked slots from available slots
+        free_slots = [slot for slot in available_slots if slot not in booked_slots]
+        print("Available slots from DB:", [slot.time_slot for slot in availability])
+        print("Booked slots from DB:", [appt.time for appt in booked_appointments])
+        return jsonify({'success': True, 'available_slots': free_slots}), 200
+    except Exception as e:
+        return jsonify({'success': False, 'message': f'Error fetching available slots: {str(e)}'}), 500
 @doctor_bp.route('/api/doctors', methods=['GET'])
 def get_doctors():
     specialization = request.args.get('specialization')

@@ -9,7 +9,8 @@ from models.user import User
 from routes.doctor import doctor_bp
 from routes.patient import patient_bp
 from routes.appointment import appointment_bp
-
+# from models.doctor_schedule import DoctorSchedule
+from models.schedule import Schedule
 from routes.payment import payment_bp
 
 
@@ -30,7 +31,6 @@ def init_db():
         print("Database initialized!")
 # Initialize database during app setup
 init_db()
-
 @app.route('/api/register', methods=['POST'])
 def register():
     try:
@@ -60,7 +60,22 @@ def register():
 
         db.session.add(new_user)
         db.session.commit()
-
+        print("role",role)
+        if role == 'doctor':
+            slots = [ 
+            Schedule(doctor_id=new_user.id, day='Monday', time_slot='10:00'),
+            Schedule(doctor_id=new_user.id, day='Monday', time_slot='11:00'),
+            Schedule(doctor_id=new_user.id, day='Tuesday', time_slot='10:00'),
+            Schedule(doctor_id=new_user.id, day='Tuesday', time_slot='11:00'),
+            ]
+            db.session.add_all(slots)
+            db.session.commit()
+        
+        # db.session.query(DoctorSchedule).delete()
+        # print('emtied')
+        # db.session.execute('DELETE FROM doctor_schedules')
+        # db.session.commit()
+        # print('Table emptied')
         return jsonify({'success': True, 'message': 'Registration successful'}), 201
 
     except Exception as e:
@@ -106,5 +121,23 @@ def create_room():
     }
     response = requests.post(url, headers=headers, json=data)
     return jsonify(response.json())
+@app.route('/api/debug_doctor_slots')
+def debug_doctor_slots():
+    all_slots = Schedule.query.all()
+    return jsonify([
+        {
+            'doctor_id': s.doctor_id,
+            'day': s.day,
+            'time': s.time_slot
+        } for s in all_slots
+    ])
+# @app.route('/api/reset_schedules', methods=['POST'])
+# def reset_schedules():
+#     try:
+#         db.session.query(DoctorSchedule).delete()
+#         db.session.commit()
+#         return jsonify({'success': True, 'message': 'All schedules deleted successfully'}), 200
+#     except Exception as e:
+#         return jsonify({'success': False, 'message': str(e)}), 500
 if __name__ == '__main__':
     app.run(debug=True)
