@@ -67,6 +67,7 @@ def get_available_slots():
         return jsonify({'success': True, 'available_slots': free_slots}), 200
     except Exception as e:
         return jsonify({'success': False, 'message': f'Error fetching available slots: {str(e)}'}), 500
+
 @doctor_bp.route('/api/doctors', methods=['GET'])
 def get_doctors():
     specialization = request.args.get('specialization')
