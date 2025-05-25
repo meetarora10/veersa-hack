@@ -42,12 +42,12 @@ MediBridge offers:
 
 | Area         | Tech Used                            |
 |--------------|---------------------------------------|
-| 💻 Frontend  | React.js                              |
+| 💻 Frontend  | React.js / tailwind                 |
 | 🔙 Backend   | Flask                               |
 | 💾 Database  | SQLITE                              |
 | 💸 Payments  | Square API                          |
-| 🎙️ Transcription | Google Speech-to-Text / AssemblyAI |
-| 🔐 Auth      | JWT, bcrypt, HTTPS                    |
+| 🎙️ Transcription | Google Speech-to-Text / Deepgram in Daily.co |
+| 🔐 Auth      | JWT, bcrypt, HTTPS                  |
 
 ---
 
@@ -56,9 +56,9 @@ MediBridge offers:
 - 🔐 User Authentication (JWT)
 - 📋 Upload patient data and case description
 - 🎯 Choose consultation specialty
-- 💸 Online payment integration (Razorpay)
+- 💸 Online payment integration (Card / GooglePay)
 - 📞 Secure video consultation with transcription
-- 💬 Chat functionality within the app
+- 💬 Chat functionality within the app ( with file sharing )
 - 🗂️ Encrypted storage for future reference
 
 ---
@@ -78,6 +78,9 @@ Booking Appointment -1
 Booking Appointment -2
 ![image](https://github.com/user-attachments/assets/0e60b65d-0836-4034-b778-bc0f0ae9f6d2)
 Booking Appointment -2
+![image](https://github.com/user-attachments/assets/4dc9f016-7311-47a4-8393-e7c060b61810)
+Meeting with live transcription and chat
+
 
 
 ## DATA MODEL
@@ -89,8 +92,11 @@ Booking Appointment -2
 
 
 ## 🔮 Future Scope
- -📱 Mobile App Integration (Android/iOS)
+ -📱 Mobile App Integration (Android/iOS) / PWA
  -🧾 Govt. health record integration
  -📶 Offline support with SMS fallback
+ - OCR validation of Doctor license
+ - Meeting Summary and transcript download support
+ - Nodemailer and Notification 
 
 
