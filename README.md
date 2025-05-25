@@ -80,6 +80,9 @@ Booking Appointment -2
 Booking Appointment -2
 
 
+## DATA MODEL
+![image](https://github.com/user-attachments/assets/7ce483d9-e740-4e0b-a738-521dbacd6b23)
+
 
 
 
