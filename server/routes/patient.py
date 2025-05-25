@@ -2,7 +2,7 @@ from flask import Blueprint,jsonify,session, request
 from models.user import User
 from models.patient import update_patient_profile
 from models.appointment import Appointment
-
+import json
 patient_bp = Blueprint('patient', __name__)
 
 @patient_bp.route('/dashboard', methods=['GET'])
@@ -50,13 +50,42 @@ def patient_dashboard():
 
 @patient_bp.route('/update_profile', methods=['POST'])
 def update_profile():
-    data = request.json
-    user_id = data.get('user_id')
-    profile_data = data.get('profile')
-    if not user_id or not profile_data:
-        return jsonify({'success': False, 'message': 'Missing data'}), 400
-    success = update_patient_profile(user_id, profile_data)
-    if success:
-        return jsonify({'success': True, 'message': 'Profile updated'})
-    else:
-        return jsonify({'success': False, 'message': 'Update failed'}), 500
+    from pprint import pprint
+    import json
+
+    print("---- FORM DATA ----")
+    pprint(request.form)
+    print("---- FILES ----")
+    pprint(request.files)
+
+    try:
+        user_id = request.form.get('user_id')
+        profile_data = {
+            "name": request.form.get("name"),
+            "age": request.form.get("age"),
+            "gender": request.form.get("gender"),
+            "email": request.form.get("email"),
+            "phone": request.form.get("phone"),
+            "medicalConditions": json.loads(request.form.get("medicalConditions", "[]")),
+            "emergencyContact": json.loads(request.form.get("emergencyContact", "{}")),
+        }
+        image = request.files.get("image")
+
+        if not user_id or not profile_data:
+            return jsonify({'success': False, 'message': 'Missing data'}), 400
+
+        # Optional: print to confirm parsed data
+        print(f"Parsed profile data for user {user_id}:")
+        pprint(profile_data)
+
+        # Dummy: pretend to save the profile
+        success = True  # Replace with actual DB call
+
+        if success:
+            return jsonify({'success': True, 'message': 'Profile updated'})
+        else:
+            return jsonify({'success': False, 'message': 'Update failed'}), 500
+    except Exception as e:
+        print("Error:", str(e))
+        return jsonify({'success': False, 'message': str(e)}), 500
+

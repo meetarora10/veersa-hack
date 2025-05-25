@@ -138,7 +138,7 @@ const DoctorProfile = ({ userData = {}, onUpdate }) => {
             placeholder="Specialization (e.g., Cardiology, Pediatrics)"
           />
           <div className="relative">
-            <span className="absolute left-3 top-3 text-gray-500">$</span>
+            <span className="absolute left-3 top-3 text-gray-500">₹</span>
             <input
               className="w-full p-3 pl-8 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               name="price"
@@ -186,7 +186,7 @@ const DoctorProfile = ({ userData = {}, onUpdate }) => {
             <p className="flex justify-between">
               <span className="font-medium">Consultation Fee:</span>
               <span className="text-green-600 font-semibold">
-                {profile.price ? `$${profile.price}` : 'Not set'}
+                {profile.price ? `₹${profile.price}` : 'Not set'}
               </span>
             </p>
           </div>
