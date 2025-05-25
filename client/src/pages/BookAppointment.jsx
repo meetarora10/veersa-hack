@@ -42,7 +42,7 @@ const BookAppointment = () => {
     const fetchDoctor = async () => {
       try {
         let res = await fetch(
-          `http://localhost:5000/api/doctors?id=${doctorId}`
+          `${import.meta.env.VITE_BACKEND_URL}/api/doctors?id=${doctorId}`
         );
         let data = await res.json();
         let doc = Array.isArray(data)
@@ -70,7 +70,7 @@ const BookAppointment = () => {
 
     try {
       const res = await axios.get(
-        `http://localhost:5000/api/available_slots?doctor_id=${doctorId}&date=${formData.date}`
+        `${import.meta.env.VITE_BACKEND_URL}/api/available_slots?doctor_id=${doctorId}&date=${formData.date}`
       );
       if (res.data.success && res.data.available_slots.length > 0) {
         setAvailableSlots(res.data.available_slots);
@@ -225,7 +225,7 @@ const BookAppointment = () => {
     setIsLoading(true);
 
     try {
-      const res = await axios.post("http://localhost:5000/api/appointments", {
+      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/appointments`, {
         ...formData,
         patient_id,
         doctor_id: doctor.id,

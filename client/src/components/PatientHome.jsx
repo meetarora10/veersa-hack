@@ -29,7 +29,7 @@ const PatientHome = ({ userProfile, appointments= [] }) => {
 
   const handleJoinCall = async () => {
     // Fetch/create a Daily.co room from backend
-    const res = await fetch("http://localhost:5000/api/create-room", {
+    const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/create-room`, {
       credentials: "include",
     });
     const data = await res.json();

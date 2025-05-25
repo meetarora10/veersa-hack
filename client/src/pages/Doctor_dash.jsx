@@ -16,7 +16,7 @@ const DoctorDashboard = () => {
   useEffect(() => {
     const fetchDashboard = async () => {
       try {
-        const res = await fetch('http://localhost:5000/api/doctor_dashboard', {
+        const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/doctor_dashboard`, {
           method: 'GET',
           credentials: 'include',
         });
@@ -37,7 +37,7 @@ const DoctorDashboard = () => {
     try {
       console.log('Sending profile update:', updatedProfile); // Debug log
       
-      const res = await fetch('http://localhost:5000/api/doctor_profile', {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/doctor_profile`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

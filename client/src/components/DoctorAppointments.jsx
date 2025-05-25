@@ -18,7 +18,7 @@ const DoctorAppointments = ({ appointments: allAppointments }) => {
   const handleCancel = async (id) => {
     if (!window.confirm("Are you sure you want to cancel this appointment?")) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/appointments/${id}`, {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/appointments/${id}`, {
         method: "DELETE",
         credentials: "include",
       });

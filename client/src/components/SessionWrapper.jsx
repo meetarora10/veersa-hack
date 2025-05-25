@@ -21,7 +21,7 @@ const VideoCallContent = ({ roomUrl, userRole }) => {
     transcriptionStartedRef.current = roomName;
     try {
       const response = await fetch(
-        `http://localhost:5000/api/transcription/start/${roomName}`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/transcription/start/${roomName}`,
         {
           method: "POST",
           headers: {

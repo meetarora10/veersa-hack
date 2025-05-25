@@ -135,7 +135,7 @@ function ChatBox({ onClose, userRole }) {
         setUploadProgress(0);
       };
 
-      xhr.open("POST", "http://localhost:5000/api/files/upload");
+      xhr.open("POST", `${import.meta.env.VITE_BACKEND_URL}/api/files/upload`);
       xhr.send(formData);
     } catch (error) {
       console.error("File upload error:", error);

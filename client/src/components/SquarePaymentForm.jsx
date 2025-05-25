@@ -14,7 +14,7 @@ export default function SquarePaymentForm({ amount, onSuccess, onError, disabled
       locationId={SQUARE_LOCATION_ID}
       cardTokenizeResponseReceived={async (token, buyer) => {
         try {
-          const res = await fetch("http://localhost:5000/api/pay", {
+          const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/pay`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ sourceId: token.token, amount }),
