@@ -1,4 +1,4 @@
-# 🩺 MediBridge – Telehealth from Anywhere
+# 🩺 Tealth – Telehealth from Anywhere
 
 A digitally enabled telehealth platform that ensures **instant, secure, and affordable healthcare consultations**, especially for rural and remote regions.
 
