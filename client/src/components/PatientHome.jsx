@@ -1,7 +1,10 @@
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import { format, isToday, isAfter, isBefore, addMinutes } from "date-fns";
 import SearchDoctor from "../pages/SearchDoctor";
 
-const PatientHome = ({ userProfile, appointments }) => {
+const PatientHome = ({ userProfile, appointments= [] }) => {
+  const navigate = useNavigate();
   const now = new Date();
 
   // Only consider appointments in the future
@@ -23,6 +26,22 @@ const PatientHome = ({ userProfile, appointments }) => {
       isAfter(now, fiveMinBefore) &&
       isBefore(now, addMinutes(apptDateTime, 60));
   }
+
+  const handleJoinCall = async () => {
+    // Fetch/create a Daily.co room from backend
+    const res = await fetch("http://localhost:5000/api/create-room", {
+      credentials: "include",
+    });
+    const data = await res.json();
+    if (data.url) {
+      // Extract the real Daily room ID from the URL
+      const urlParts = data.url.split('/');
+      const roomId = urlParts[urlParts.length - 1];
+      navigate(`/meet/${roomId}`, { state: { meetingUrl: data.url, userRole: "patient" } });
+    } else {
+      alert("Could not start meeting.");
+    }
+  };
 
   return (
     <div className="p-6 bg-white rounded-lg shadow-lg space-y-6">
@@ -61,6 +80,7 @@ const PatientHome = ({ userProfile, appointments }) => {
                   : "bg-gray-300 text-gray-500 cursor-not-allowed"
               }`}
               disabled={!joinEnabled}
+              onClick={handleJoinCall}
             >
               Join Call
             </button>

@@ -11,6 +11,7 @@ from routes.patient import patient_bp
 from routes.appointment import appointment_bp
 # from models.doctor_schedule import DoctorSchedule
 from models.schedule import Schedule
+from routes.meeting import meeting_bp
 from routes.payment import payment_bp
 
 
@@ -81,6 +82,7 @@ def register():
     except Exception as e:
         db.session.rollback()
         return jsonify({'success': False, 'message': f'Registration failed: {str(e)}'}), 500
+    
 @app.route('/api/login', methods=['POST'])
 def login():
     try:
@@ -103,24 +105,44 @@ def login():
 
     except Exception as e:
         return jsonify({'success': False, 'message': f'Login failed: {str(e)}'}), 500
+    
+@app.route('/api/transcription/start/<room_name>', methods=['POST'])
+def start_transcription(room_name):
+    try:
+        daily_api_key = os.getenv('DAILY_API_KEY')
+        if not daily_api_key:
+            return jsonify({'error': 'DAILY_API_KEY not configured'}), 500
+
+        response = requests.post(
+            f'https://api.daily.co/v1/rooms/{room_name}/transcription/start',
+            headers={
+                'Content-Type': 'application/json',
+                'Authorization': f'Bearer {daily_api_key}'
+            },
+            json={
+                'language': 'en',
+                'model': 'nova-2',
+                'punctuate': True,
+                'profanity_filter': True
+            }
+        )
+        print(response)
+        print('Daily API status:', response.status_code)
+        print('Daily API response:', response.text)
+
+        if not response.ok:
+            return jsonify({'error': f'Daily API responded with status: {response.status_code}'}), response.status_code
+
+        return jsonify(response.json())
+    
+    except Exception as e:
+        print('Transcription start error:', str(e))
+        return jsonify({'error': str(e)}), 500    
+    
 app.register_blueprint(doctor_bp)
 app.register_blueprint(appointment_bp, url_prefix='/api')
-@app.route('/api/create-room', methods=['GET'])
-def create_room():
-    url = "https://api.daily.co/v1/rooms"
-    headers = {
-        "Authorization": f"Bearer {DAILY_API_KEY}",
-        "Content-Type": "application/json"
-    }
-    data = {
-        "properties": {
-            "enable_chat": True,
-            "start_video_off": False,
-            "start_audio_off": False
-        }
-    }
-    response = requests.post(url, headers=headers, json=data)
-    return jsonify(response.json())
+app.register_blueprint(meeting_bp)
+
 @app.route('/api/debug_doctor_slots')
 def debug_doctor_slots():
     all_slots = Schedule.query.all()
@@ -140,4 +162,4 @@ def debug_doctor_slots():
 #     except Exception as e:
 #         return jsonify({'success': False, 'message': str(e)}), 500
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='127.0.0.1', port=5000)
