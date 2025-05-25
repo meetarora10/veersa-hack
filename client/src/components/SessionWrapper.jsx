@@ -12,8 +12,13 @@ const VideoCallContent = ({ roomUrl, userRole }) => {
   const [error, setError] = useState(null);
   const [isJoined, setIsJoined] = useState(false);
   const [transcript, setTranscript] = useState("");
+  const transcriptionStartedRef = useRef(null);
 
   const startTranscription = async (roomName) => {
+     if (transcriptionStartedRef.current === roomName) {
+      return;
+    }
+    transcriptionStartedRef.current = roomName;
     try {
       const response = await fetch(
         `http://localhost:5000/api/transcription/start/${roomName}`,
@@ -135,9 +140,11 @@ const VideoCallContent = ({ roomUrl, userRole }) => {
         <div ref={containerRef} className="w-full h-full" />
       </div>
       {isJoined && (
-        <div className="w-1/5 flex flex-col p-3 bg-gray-50 border-l border-gray-200 overflow-y-auto">
+        <div className="w-[20vw] min-w-[300px] max-w-[400px] flex flex-col p-3 bg-gray-50 border-l border-gray-200 overflow-y-auto">
           <Transcription transcription={transcript} />
-          <ChatBox />
+          <div className="mt-4 flex-1 flex flex-col">
+            <ChatBox />
+          </div>
         </div>
       )}
     </div>

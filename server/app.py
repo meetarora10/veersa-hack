@@ -13,13 +13,16 @@ from routes.appointment import appointment_bp
 from models.schedule import Schedule
 from routes.meeting import meeting_bp
 from routes.payment import payment_bp
+from websocket.chat_server import ChatServer
+from routes.file_routes import file_routes
 
 
 load_dotenv()
 app = Flask(__name__)
 app.register_blueprint(patient_bp, url_prefix='/api/patient', name='patient_v2')
 app.register_blueprint(payment_bp)
-CORS(app, supports_credentials=True, origins=['http://localhost:5173'])
+CORS(app, supports_credentials=True, origins=['http://localhost:5173'], allow_headers=['Content-Type'], methods=['GET', 'POST', 'OPTIONS'])
+app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024  # 10MB max file size
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = os.getenv('SECRET_KEY')
@@ -32,6 +35,13 @@ def init_db():
         print("Database initialized!")
 # Initialize database during app setup
 init_db()
+
+# Initialize chat server
+chat_server = ChatServer(app)
+
+# Register file routes
+app.register_blueprint(file_routes, url_prefix='/api/files')
+
 @app.route('/api/register', methods=['POST'])
 def register():
     try:
@@ -162,4 +172,4 @@ def debug_doctor_slots():
 #     except Exception as e:
 #         return jsonify({'success': False, 'message': str(e)}), 500
 if __name__ == '__main__':
-    app.run(debug=True, host='127.0.0.1', port=5000)
+    chat_server.run(app, debug=True, port=5000)
