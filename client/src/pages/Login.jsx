@@ -52,6 +52,10 @@ function Login() {
             } else {
                 setSuccess(false);
                 setMessage(data.message || 'Login failed');
+                setFormData({
+                    email: '',
+                    password: '',
+                });
             }
         } catch (error) {
             setSuccess(false);

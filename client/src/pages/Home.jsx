@@ -8,7 +8,7 @@ import Footer from "../components/Footer";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
-const phrases = ["Healing Hands & Caring Hearts"];
+const phrases = ["Your Health, Your Location, One Connection."];
 
 function useTypewriter(text, speed = 1000, pause = 1200) {
   const [displayed, setDisplayed] = useState("");

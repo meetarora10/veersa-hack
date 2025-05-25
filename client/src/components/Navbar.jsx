@@ -63,8 +63,8 @@ const Navbar = () => {
                         <span className={`block w-6 h-0.5 transition-all ${isNavOpen ? '-rotate-45 -translate-y-1.5' : ''} ${navmod ? 'bg-blue-800' : 'bg-blue-700'}`} />
                     </button>
                     <Link to="/" className="flex items-center text-xl md:text-2xl font-extrabold tracking-wide drop-shadow-sm select-none whitespace-nowrap mr-4">
-                        <span className="text-blue-400">Tel</span>
-                        <span className="italic text-teal-400/70">Hea</span>
+                        
+                        <span className="italic text-teal-400/70">Tea</span>
                         <span className="text-blue-400 font-bold">lth</span>
                     </Link>
                     <nav className="hidden md:flex flex-1 justify-center">
