@@ -40,9 +40,9 @@ MediBridge offers:
 | Area         | Tech Used                            |
 |--------------|---------------------------------------|
 | 💻 Frontend  | React.js                              |
-| 🔙 Backend   | Node.js, Express.js                   |
+| 🔙 Backend   | Flask                               |
 | 💾 Database  | SQLITE                              |
-| 💸 Payments  | Razorpay API                          |
+| 💸 Payments  | Square API                          |
 | 🎙️ Transcription | Google Speech-to-Text / AssemblyAI |
 | 🔐 Auth      | JWT, bcrypt, HTTPS                    |
 
