@@ -193,7 +193,6 @@ function ChatBox({ onClose, userRole }) {
       ref={chatBoxRef}
       className="flex flex-col h-full bg-card dark:bg-dark-card rounded-lg border border-border dark:border-dark-border shadow-lg"
     >
-      {/* Chat Header */}
       <div className="p-3 border-b border-border dark:border-dark-border flex justify-between items-center">
         <h3 className="text-lg font-semibold text-foreground dark:text-dark-foreground">
           Room Chat
@@ -212,8 +211,6 @@ function ChatBox({ onClose, userRole }) {
           </button>
         </div>
       </div>
-
-      {/* Messages Area */}
       <div className="flex-1 min-h-0 overflow-y-auto p-3 space-y-4">
         {messages.map((message) => (
           <div key={message.id} className="flex items-start space-x-2">
