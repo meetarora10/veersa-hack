@@ -9,8 +9,7 @@ export default function Footer() {
           <div className="flex items-center gap-2 mb-4">
             <span className="text-red-500 text-3xl">❤️</span>
             <h2 className="text-2xl font-bold">
-              <span className="text-blue-400">Tel</span>
-              <span className="italic text-indigo-300">Hea</span>
+              <span className="italic text-indigo-300">Tea</span>
               <span className="text-blue-400 font-bold">lth</span>
             </h2>
           </div>
@@ -37,7 +36,7 @@ export default function Footer() {
         </div>
       </div>
       <div className="border-t border-gray-800 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center text-sm">
-        <p>© 2025 Telehealth. All rights reserved.</p>
+        <p>© 2025 Tealth. All rights reserved.</p>
         
         {/* Social Icons */}
         <div className="flex gap-5 mt-4 md:mt-0 text-white">

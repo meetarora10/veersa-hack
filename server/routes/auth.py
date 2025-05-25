@@ -21,9 +21,16 @@ def register():
         role = data.get('role', 'patient')
         specialization = data.get('specialization')
 
-        if not email or not password or not confirm_password:
+        if not email or not password or not confirm_password or not name or not age or not gender:
             return jsonify({'success': False, 'message': 'All fields are required'}), 400
-
+        if email.count('@') != 1 or '.' not in email.split('@')[1]:
+            return jsonify({'success': False, 'message': 'Invalid email format'}), 400
+        if role == 'doctor' and int(age)<20:
+            return jsonify({'success': False, 'message': 'Doctor must be at least 20 years old'}), 400
+        if role == 'doctor' and not specialization:
+            return jsonify({'success': False, 'message': 'Specialization is required for doctors'}), 400
+        if len(password) < 8:
+            return jsonify({'success': False, 'message': 'Password must be at least 8 characters long'}), 400
         if password != confirm_password:
             return jsonify({'success': False, 'message': 'Passwords do not match'}), 400
 
