@@ -4,6 +4,7 @@ from models.appointment import Appointment
 # from models.doctor_schedule import DoctorSchedule
 from models.schedule import Schedule
 from datetime import datetime
+from database import db
 doctor_bp = Blueprint('doctor', __name__)
 @doctor_bp.route('/api/doctor_dashboard', methods=['GET'])
 def doctor_dashboard():
@@ -67,7 +68,57 @@ def get_available_slots():
         return jsonify({'success': True, 'available_slots': free_slots}), 200
     except Exception as e:
         return jsonify({'success': False, 'message': f'Error fetching available slots: {str(e)}'}), 500
-
+@doctor_bp.route('/api/doctor_profile', methods=['PUT'])
+def update_doctor_profile():
+    try:
+        # Get doctor ID from session
+        doctor_id = session.get('doctor_id') or session.get('user_id')
+        
+        if not doctor_id:
+            return jsonify({'success': False, 'message': 'Unauthorized'}), 401
+        
+        # Get the updated data from request
+        data = request.get_json()
+        
+        if not data:
+            return jsonify({'success': False, 'message': 'No data provided'}), 400
+        
+        # Find the doctor
+        doctor = User.query.filter_by(id=doctor_id, role='doctor').first()
+        
+        if not doctor:
+            return jsonify({'success': False, 'message': 'Doctor not found'}), 404
+        
+        # Update fields if provided
+        if 'name' in data:
+            doctor.name = data['name']
+        if 'age' in data:
+            doctor.age = int(data['age']) if data['age'] else None
+        if 'gender' in data:
+            doctor.gender = data['gender']
+        if 'specialization' in data:
+            doctor.specialization = data['specialization']
+        if 'price' in data:
+            doctor.price = float(data['price']) if data['price'] else None
+        if 'image' in data:
+            doctor.image = data['image']
+        
+        # Commit changes to database
+        db.session.commit()
+        
+        return jsonify({
+            'success': True,
+            'message': 'Profile updated successfully',
+            'data': doctor.to_dict()
+        })
+        
+    except ValueError as e:
+        db.session.rollback()
+        return jsonify({'success': False, 'message': f'Invalid data type: {str(e)}'}), 400
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error updating doctor profile: {str(e)}")
+        return jsonify({'success': False, 'message': 'Internal server error'}), 500
 @doctor_bp.route('/api/doctors', methods=['GET'])
 def get_doctors():
     specialization = request.args.get('specialization')
