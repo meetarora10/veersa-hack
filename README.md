@@ -92,10 +92,10 @@ Meeting with live transcription and chat
 
 
 ## 🔮 Future Scope
- -📱 Mobile App Integration (Android/iOS) / PWA
- -🧾 Govt. health record integration
- -📶 Offline support with SMS fallback
  - OCR validation of Doctor license
+ - 📱 Mobile App Integration (Android/iOS) / PWA
+ - 📶 Offline support with SMS fallback
+ - Govt. health record integration
  - Meeting Summary and transcript download support
  - Nodemailer and Notification 
 
