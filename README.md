@@ -81,7 +81,8 @@ Booking Appointment -2
 ![image](https://github.com/user-attachments/assets/4dc9f016-7311-47a4-8393-e7c060b61810)
 Meeting with live transcription and chat
 
-
+## Short Demo
+https://github.com/user-attachments/assets/e06fc83b-08ff-47d3-b154-1ebc6318ffd2
 
 ## DATA MODEL
 ![image](https://github.com/user-attachments/assets/7ce483d9-e740-4e0b-a738-521dbacd6b23)
