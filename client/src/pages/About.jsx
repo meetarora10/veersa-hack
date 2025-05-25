@@ -16,7 +16,7 @@ function About() {
             About Our Telehealth Platform
           </h1>
           <p className="text-lg text-gray-700 mb-4 text-center md:text-left">
-            <span className="font-semibold text-blue-700">Telehealth</span> is an innovative platform designed to make healthcare accessible to everyone,
+            <span className="font-semibold text-blue-700">Tealth</span> is an innovative platform designed to make healthcare accessible to everyone,
             regardless of location. Our mission is to provide seamless, secure, and compassionate care through modern technology.
           </p>
           <p className="text-lg text-gray-700 mb-4 text-center md:text-left">
