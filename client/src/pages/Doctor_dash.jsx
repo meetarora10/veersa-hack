@@ -33,6 +33,37 @@ const DoctorDashboard = () => {
     };
     fetchDashboard();
   }, []);
+    const handleProfileUpdate = async (updatedProfile) => {
+    try {
+      console.log('Sending profile update:', updatedProfile); // Debug log
+      
+      const res = await fetch('http://localhost:5000/api/doctor_profile', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify(updatedProfile)
+      });
+      
+      console.log('Response status:', res.status); // Debug log
+      const data = await res.json();
+      console.log('Response data:', data); // Debug log
+      
+      if (data.success) {
+        setUserData(prev => ({
+          ...prev,
+          ...data.data
+        }));
+        console.log('Profile updated successfully');
+      } else {
+        throw new Error(data.message || 'Unknown server error');
+      }
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      throw error; // Re-throw so component can handle it
+    }
+  };
 
   const sidebarItems = [
     { id: "home", icon: <FaHome />, label: "Home" },
@@ -55,7 +86,7 @@ const DoctorDashboard = () => {
       case "appointments":
         return <DoctorAppointments appointments={appointments} />;
       case "profile":
-        return <DoctorProfile userData={userData} />;
+        return <DoctorProfile userData={userData} onUpdate={handleProfileUpdate} />;
       case "messages":
         return <div className="text-gray-500">Messages tab coming soon...</div>;
       case "logout": 

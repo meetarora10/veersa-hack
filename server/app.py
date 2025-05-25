@@ -9,8 +9,9 @@ from models.user import User
 from routes.doctor import doctor_bp
 from routes.patient import patient_bp
 from routes.appointment import appointment_bp
+from routes.auth import auth_bp
 # from models.doctor_schedule import DoctorSchedule
-from models.schedule import Schedule
+# from models.schedule import Schedule
 from routes.meeting import meeting_bp
 from routes.payment import payment_bp
 from websocket.chat_server import ChatServer
@@ -28,94 +29,21 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = os.getenv('SECRET_KEY')
 DAILY_API_KEY = os.environ.get('DAILY_API_KEY')
 db.init_app(app)
-# ------------------ Database Initialization ------------------ #
+
+
 def init_db():
     with app.app_context():
         db.create_all()
         print("Database initialized!")
-# Initialize database during app setup
 init_db()
-
-# Initialize chat server
 chat_server = ChatServer(app)
 
-# Register file routes
 app.register_blueprint(file_routes, url_prefix='/api/files')
+app.register_blueprint(auth_bp, url_prefix='/api/')
+app.register_blueprint(doctor_bp)
+app.register_blueprint(appointment_bp, url_prefix='/api')
+app.register_blueprint(meeting_bp)
 
-@app.route('/api/register', methods=['POST'])
-def register():
-    try:
-        data = request.get_json()
-        name= data.get('name')
-        age = data.get('age')
-        gender = data.get('gender')
-        email = data.get('email')
-        password = data.get('password')
-        confirm_password = data.get('confirm_password')
-        role = data.get('role', 'patient')  # Default to 'patient' if not provided
-        specialization = data.get('specialization')
-        # Validate required fields
-        if not email or not password or not confirm_password:
-            return jsonify({'success': False, 'message': 'All fields are required'}), 400
-
-        if password != confirm_password:
-            return jsonify({'success': False, 'message': 'Passwords do not match'}), 400
-
-        existing_user = User.query.filter_by(email=email).first()
-        if existing_user:
-            return jsonify({'success': False, 'message': 'Email already exists'}), 409
-
-        # Hash password and create user
-        hashed_password = generate_password_hash(password)
-        new_user = User(name=name, age=age, gender=gender, email=email, password_hash=hashed_password, role=role, specialization=specialization)
-
-        db.session.add(new_user)
-        db.session.commit()
-        print("role",role)
-        if role == 'doctor':
-            slots = [ 
-            Schedule(doctor_id=new_user.id, day='Monday', time_slot='10:00'),
-            Schedule(doctor_id=new_user.id, day='Monday', time_slot='11:00'),
-            Schedule(doctor_id=new_user.id, day='Tuesday', time_slot='10:00'),
-            Schedule(doctor_id=new_user.id, day='Tuesday', time_slot='11:00'),
-            ]
-            db.session.add_all(slots)
-            db.session.commit()
-        
-        # db.session.query(DoctorSchedule).delete()
-        # print('emtied')
-        # db.session.execute('DELETE FROM doctor_schedules')
-        # db.session.commit()
-        # print('Table emptied')
-        return jsonify({'success': True, 'message': 'Registration successful'}), 201
-
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({'success': False, 'message': f'Registration failed: {str(e)}'}), 500
-    
-@app.route('/api/login', methods=['POST'])
-def login():
-    try:
-        data = request.get_json()
-        email = data.get('email')
-        password = data.get('password')
-        
-        if not email or not password:
-            return jsonify({'success': False, 'message': 'Email and password are required'}), 400
-
-        user = User.query.filter_by(email=email).first()
-        if user and user.check_password(password):
-            session['user_id'] = user.id
-            session['role'] = user.role
-            session.permanent = True  # Make the session permanent
-            print("after login",dict(session))
-            return jsonify({'success': True, 'message': 'Login successful','id': user.id, 'role': user.role}), 200
-        else:
-            return jsonify({'success': False, 'message': 'Invalid email or password'}), 401
-
-    except Exception as e:
-        return jsonify({'success': False, 'message': f'Login failed: {str(e)}'}), 500
-    
 @app.route('/api/transcription/start/<room_name>', methods=['POST'])
 def start_transcription(room_name):
     try:
@@ -149,27 +77,6 @@ def start_transcription(room_name):
         print('Transcription start error:', str(e))
         return jsonify({'error': str(e)}), 500    
     
-app.register_blueprint(doctor_bp)
-app.register_blueprint(appointment_bp, url_prefix='/api')
-app.register_blueprint(meeting_bp)
-
-@app.route('/api/debug_doctor_slots')
-def debug_doctor_slots():
-    all_slots = Schedule.query.all()
-    return jsonify([
-        {
-            'doctor_id': s.doctor_id,
-            'day': s.day,
-            'time': s.time_slot
-        } for s in all_slots
-    ])
-# @app.route('/api/reset_schedules', methods=['POST'])
-# def reset_schedules():
-#     try:
-#         db.session.query(DoctorSchedule).delete()
-#         db.session.commit()
-#         return jsonify({'success': True, 'message': 'All schedules deleted successfully'}), 200
-#     except Exception as e:
-#         return jsonify({'success': False, 'message': str(e)}), 500
 if __name__ == '__main__':
     chat_server.run(app, debug=True, port=5000)
+
