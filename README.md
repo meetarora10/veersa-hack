@@ -62,8 +62,8 @@ MediBridge offers:
 
 
 ## 🔮 Future Scope
--📱 Mobile App Integration (Android/iOS)
--🧾 Govt. health record integration
--📶 Offline support with SMS fallback
+ -📱 Mobile App Integration (Android/iOS)
+ -🧾 Govt. health record integration
+ -📶 Offline support with SMS fallback
 
 
