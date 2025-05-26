@@ -27,12 +27,12 @@ After the pandemic, access to quality healthcare from remote locations has becom
 
 ## 🧠 Our Solution
 
-MediBridge offers:
+Tealth offers:
 
 - 🧑‍⚕️ Instant doctor consultations via video
 - 📄 Patient profile & medical history capture
 - 🏥 Specialty selection for targeted care
-- 💳 Razorpay integration for seamless payments
+- 💳 Squarepay integration for seamless payments
 - 🔐 Secure login and PHI data handling
 - 💬 Chatbox with real-time transcription support
 
