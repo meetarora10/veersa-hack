@@ -44,10 +44,7 @@ const BookAppointment = () => {
         let res = await fetch(
           `${import.meta.env.VITE_BACKEND_URL}/api/doctors?id=${doctorId}`,
           {
-            credentials: 'include',
-            headers: {
-              'Accept': 'application/json'
-            }
+            credentials: 'include'
           }
         );
         let data = await res.json();
@@ -67,37 +64,35 @@ const BookAppointment = () => {
       }
     };
     fetchDoctor();
+    
   }, [doctorId]);
   useEffect(() => {
-    // Fetch available slots when date changes
-    const fetchSlots = async () => {
-      if (!formData.date) return;
+  // Fetch available slots when date changes
+  const fetchSlots = async () => {
+    if (!formData.date) return;
 
-      try {
-        const res = await axios.get(
-          `${import.meta.env.VITE_BACKEND_URL}/api/available_slots?doctor_id=${doctorId}&date=${formData.date}`,
-          {
-            withCredentials: true,
-            headers: {
-              'Accept': 'application/json'
-            }
-          }
-        );
-        if (res.data.success && res.data.available_slots.length > 0) {
-          setAvailableSlots(res.data.available_slots);
-        } else {
-          setAvailableSlots([]);
-          alert("No available slots for this date");
-          console.log("No available slots:", res.data.error);
+    try {
+      const res = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/api/available_slots?doctor_id=${doctorId}&date=${formData.date}`,
+        {
+          withCredentials: true
         }
-      } catch (err) {
+      );
+      if (res.data.success && res.data.available_slots.length > 0) {
+        setAvailableSlots(res.data.available_slots);
+      } else {
         setAvailableSlots([]);
-        console.error("Error fetching slots:", err);
+        alert("No available slots for this date");
+        console.log("No available slots:", res.data.error);
       }
-    };
+    } catch (err) {
+      setAvailableSlots([]);
+      console.error("Error fetching slots:", err);
+    }
+  };
 
-    fetchSlots();
-  }, [formData.date, doctorId]);
+  fetchSlots();
+}, [formData.date, doctorId]);
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -246,11 +241,7 @@ const BookAppointment = () => {
           amount: doctor.price
         },
         {
-          withCredentials: true,
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          }
+          withCredentials: true
         }
       );
 
@@ -314,8 +305,9 @@ const BookAppointment = () => {
             <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-blue-200 mb-2 shadow">
               <img
                 src={
-                  doctor.photoUrl ||
-                  "https://cdn-icons-png.flaticon.com/512/3870/3870822.png"
+                  doctor.photoUrl
+                    ? `${import.meta.env.VITE_BACKEND_URL}${doctor.photoUrl}`
+                    : "https://cdn-icons-png.flaticon.com/512/3870/3870822.png"
                 }
                 alt={doctor.name}
                 className="w-full h-full object-cover"

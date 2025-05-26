@@ -50,8 +50,25 @@ def register():
             slots = [
                 Schedule(doctor_id=new_user.id, day='Monday', time_slot='10:00'),
                 Schedule(doctor_id=new_user.id, day='Monday', time_slot='11:00'),
+                Schedule(doctor_id=new_user.id, day='Monday', time_slot='16:00'),
                 Schedule(doctor_id=new_user.id, day='Tuesday', time_slot='10:00'),
                 Schedule(doctor_id=new_user.id, day='Tuesday', time_slot='11:00'),
+                Schedule(doctor_id=new_user.id, day='Tuesday', time_slot='16:00'),
+                Schedule(doctor_id=new_user.id, day='Wednesday', time_slot='10:00'),
+                Schedule(doctor_id=new_user.id, day='Wednesday', time_slot='11:00'),
+                Schedule(doctor_id=new_user.id, day='Wednesday', time_slot='16:00'),
+                Schedule(doctor_id=new_user.id, day='Thursday', time_slot='10:00'),
+                Schedule(doctor_id=new_user.id, day='Thursday', time_slot='11:00'),
+                Schedule(doctor_id=new_user.id, day='Thursday', time_slot='16:00'),
+                Schedule(doctor_id=new_user.id, day='Friday', time_slot='10:00'),
+                Schedule(doctor_id=new_user.id, day='Friday', time_slot='11:00'),
+                Schedule(doctor_id=new_user.id, day='Friday', time_slot='16:00'),
+                Schedule(doctor_id=new_user.id, day='Saturday', time_slot='10:00'),
+                Schedule(doctor_id=new_user.id, day='Saturday', time_slot='11:00'),
+                Schedule(doctor_id=new_user.id, day='Saturday', time_slot='16:00'),
+                Schedule(doctor_id=new_user.id, day='Sunday', time_slot='10:00'),
+                Schedule(doctor_id=new_user.id, day='Sunday', time_slot='11:00'),
+                Schedule(doctor_id=new_user.id, day='Sunday', time_slot='16:00'),
             ]
             db.session.add_all(slots)
             db.session.commit()

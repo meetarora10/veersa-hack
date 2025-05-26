@@ -5,8 +5,16 @@ from models.appointment import Appointment
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from pprint import pprint
 import json
+import os
+from werkzeug.utils import secure_filename
+from flask_sqlalchemy import SQLAlchemy
 
 patient_bp = Blueprint('patient', __name__)
+
+UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'uploads', 'profile_images')
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+db = SQLAlchemy()
 
 @patient_bp.route('/dashboard', methods=['GET'])
 @jwt_required()
@@ -49,7 +57,8 @@ def patient_dashboard():
                 'phone': getattr(patient, 'emergency_contact_phone', ''),
                 'relation': getattr(patient, 'emergency_contact_relation', ''),
             },
-            'appointments': appointments_data
+            'appointments': appointments_data,
+            'image': getattr(patient, 'image', None)
         }
 
         return jsonify({'success': True, 'data': data}), 200
@@ -95,10 +104,18 @@ def update_profile_form():
         pprint(profile_data)
         if image:
             print(f"Received image file: {image.filename}")
+            filename = secure_filename(image.filename)
+            unique_filename = f"{user.id}_{filename}"
+            image_path = os.path.join(UPLOAD_FOLDER, unique_filename)
+            image.save(image_path)
+            image_url = f"/uploads/profile_images/{unique_filename}"
+            user.image = image_url
 
         # Dummy: pretend to save the profile and image
         success = update_patient_profile(int(current_user_id), profile_data)
         # You can add your image saving logic here
+
+        db.session.commit()
 
         if success:
             return jsonify({'success': True, 'message': 'Profile updated (form version)'})

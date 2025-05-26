@@ -21,9 +21,11 @@ const DoctorDashboard = () => {
           credentials: 'include',
         });
         const data = await res.json();
-        console.log(data.data);
+        console.log('backend:',data);
         if (data.success) {
+          console.log("Fetched user id:", data.data.id); // Debug log
           setUserData(data.data);
+          console.log("Fetched user data:", data.data); // Debug log
           setAppointments(data.data.appointments || []);
         } else {
           console.error("Failed to fetch doctor dashboard:", data.message);
@@ -107,7 +109,7 @@ const DoctorDashboard = () => {
         toggleSidebar={() => setIsSidebarOpen((prev) => !prev)}
       />
       <div className="flex-1 flex flex-col">
-        <Topbar userRole={userData ? userData.name : "Doctor"} />
+        <Topbar userRole="Doctor" userData={userData} />
         <div className="p-6 overflow-auto h-[calc(100vh-4rem)]">
           {renderContent()}
         </div>

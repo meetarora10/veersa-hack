@@ -1,6 +1,6 @@
 import os
 import requests
-from flask import Flask, render_template, request, redirect, session, url_for, flash, jsonify
+from flask import Flask, render_template, request, redirect, session, url_for, flash, jsonify, send_from_directory
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_cors import CORS
 from dotenv import load_dotenv
@@ -17,6 +17,7 @@ from routes.file_routes import file_routes
 from routes.transcription_routes import transcription_bp
 from flask_socketio import SocketIO
 from jwt_config import init_jwt
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 
 load_dotenv()
@@ -32,6 +33,17 @@ CORS(
                 "https://veersa-hack-c4cr.vercel.app",
                 "https://veersa-hack-c4cr-wa6c7ty2i-meet-aroras-projects.vercel.app"
             ]
+        },
+        r"/uploads/*": {
+            "origins": [
+                "http://localhost:5173",
+                "https://veersa-hack-c4cr.vercel.app",
+                "https://veersa-hack-c4cr-wa6c7ty2i-meet-aroras-projects.vercel.app"
+            ],
+            "supports_credentials": True,
+            "allow_headers": ["Content-Type", "Authorization", "Accept"],
+            "methods": ["GET", "OPTIONS"],
+            "expose_headers": ["Set-Cookie"]
         }
     },
     supports_credentials=True,
@@ -44,6 +56,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = os.getenv('SECRET_KEY')
 DAILY_API_KEY = os.environ.get('DAILY_API_KEY')
+app.config['UPLOAD_FOLDER'] = os.path.join(os.path.dirname(__file__), 'uploads')
 db.init_app(app)
 
 # Initialize JWT
@@ -64,6 +77,14 @@ app.register_blueprint(doctor_bp)
 app.register_blueprint(appointment_bp, url_prefix='/api')
 app.register_blueprint(meeting_bp)
 app.register_blueprint(transcription_bp, url_prefix='/api')
+
+@app.route('/uploads/<path:filename>')
+def serve_upload(filename):
+    try:
+        return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+    except Exception as e:
+        print(f"Error serving file: {str(e)}")
+        return jsonify({'success': False, 'message': str(e)}), 500
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))

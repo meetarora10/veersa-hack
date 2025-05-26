@@ -81,9 +81,10 @@ def get_available_slots():
         day = datetime.strptime(date, '%Y-%m-%d').strftime('%A')
         availability = Schedule.query.filter_by(doctor_id=doctor_id, day=day).all()
         booked_appointments = Appointment.query.filter_by(doctor_id=doctor_id, date=date).all()
-
-        available_slots = [slot.time_slot for slot in availability]
-        booked_slots = [appt.time for appt in booked_appointments]
+        # extract time from both availabilty and booked appointments
+        available_slots = [str(slot.time_slot) for slot in availability]
+        booked_slots = [str(appt.time) for appt in booked_appointments]
+        # remove booked slots from available slots
         free_slots = [slot for slot in available_slots if slot not in booked_slots]
 
         return jsonify({'success': True, 'available_slots': free_slots}), 200

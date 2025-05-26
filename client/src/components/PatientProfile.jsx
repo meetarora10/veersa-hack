@@ -1,6 +1,8 @@
 import React, { useState, useRef } from "react";
 import { FaUserCircle, FaCamera, FaPlus, FaTimes } from "react-icons/fa";
 
+const backendUrl = import.meta.env.VITE_BACKEND_URL; 
+
 const PatientProfile = ({ patientData, onUpdate }) => {
   if (!patientData) return <div>Loading...</div>;
 
@@ -26,6 +28,7 @@ const PatientProfile = ({ patientData, onUpdate }) => {
   const fileInputRef = useRef(null);
   const [newCondition, setNewCondition] = useState("");
   const [saving, setSaving] = useState(false);
+  const [imageUrl, setImageUrl] = useState(null);
 
   const handleChange = (e) => {
     setProfile({ ...profile, [e.target.name]: e.target.value });
@@ -107,13 +110,50 @@ const PatientProfile = ({ patientData, onUpdate }) => {
     setSaving(false);
   };
 
+  const loadImageWithAuth = async (imagePath) => {
+    if (!imagePath) return null;
+    try {
+      const response = await fetch(`${backendUrl}${imagePath}`, {
+        credentials: 'include',
+        headers: {
+          'Accept': 'image/*'
+        }
+      });
+      
+      if (response.ok) {
+        const blob = await response.blob();
+        return URL.createObjectURL(blob);
+      } else if (response.status === 401 || response.status === 403) {
+        console.error('Authentication failed for image:', response.status);
+        return null;
+      }
+      return null;
+    } catch (error) {
+      console.error('Error loading image:', error);
+      return null;
+    }
+  };
+
+  React.useEffect(() => {
+    if (profile.image && typeof profile.image === 'string') {
+      loadImageWithAuth(profile.image).then(url => {
+        setImageUrl(url);
+      });
+    }
+    return () => {
+      if (imageUrl) {
+        URL.revokeObjectURL(imageUrl);
+      }
+    };
+  }, [profile.image]);
+
   return (
     <div className="p-4 sm:p-6 bg-white rounded-2xl shadow-xl max-w-3xl mx-auto my-6">
       <div className="flex flex-col items-center mb-6 relative group">
         <div className="relative">
-          {preview ? (
+          {imageUrl ? (
             <img
-              src={preview}
+              src={imageUrl}
               alt="Profile"
               className="w-28 h-28 sm:w-32 sm:h-32 rounded-full object-cover border-4 border-blue-200 shadow-md"
             />

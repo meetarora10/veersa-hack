@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import useDebounce from "../utils/Debounce";
-import { FaClock, FaCalendarAlt } from "react-icons/fa";
+import { FaClock, FaCalendarAlt, FaUserCircle } from "react-icons/fa";
+
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 function SearchDoctor() {
   const [specialty, setSpecialty] = useState("");
@@ -90,28 +92,39 @@ function SearchDoctor() {
                 key={doctor.id}
                 className="p-5 bg-blue-100 rounded-xl shadow flex flex-col sm:flex-row sm:items-center sm:justify-between"
               >
-                <div className="flex-1">
-                  <h3 className="text-xl font-semibold text-blue-900">
-                    {doctor.name}
-                  </h3>
-                  <p className="text-blue-700">
-                    Specialization:{" "}
-                    <span className="font-medium">{doctor.specialization}</span>
-                  </p>
-                  <p className="text-blue-700">
-                    Price:{" "}
-                    <span className="font-medium">
-                      ₹{doctor.price ? doctor.price.toFixed(2) : "N/A"}
-                    </span>
-                  </p>
-                  <div className="mt-2 text-sm text-blue-600">
-                    <div className="flex items-center gap-1">
-                      <FaCalendarAlt className="text-blue-500" />
-                      <span className="font-medium">Availability:</span>
-                    </div>
-                    <p className="ml-5 mt-1 text-blue-700">
-                      {formatAvailability(doctor.availability)}
+                <div className="flex-1 flex items-start gap-4">
+                  {doctor.image ? (
+                    <img
+                      src={`${backendUrl}${doctor.image}`}
+                      alt={`${doctor.name}'s profile`}
+                      className="w-16 h-16 rounded-full object-cover border-2 border-blue-200"
+                    />
+                  ) : (
+                    <FaUserCircle className="w-16 h-16 text-blue-300" />
+                  )}
+                  <div>
+                    <h3 className="text-xl font-semibold text-blue-900">
+                      {doctor.name}
+                    </h3>
+                    <p className="text-blue-700">
+                      Specialization:{" "}
+                      <span className="font-medium">{doctor.specialization}</span>
                     </p>
+                    <p className="text-blue-700">
+                      Price:{" "}
+                      <span className="font-medium">
+                        ₹{doctor.price ? doctor.price.toFixed(2) : "N/A"}
+                      </span>
+                    </p>
+                    <div className="mt-2 text-sm text-blue-600">
+                      <div className="flex items-center gap-1">
+                        <FaCalendarAlt className="text-blue-500" />
+                        <span className="font-medium">Availability:</span>
+                      </div>
+                      <p className="ml-5 mt-1 text-blue-700">
+                        {formatAvailability(doctor.availability)}
+                      </p>
+                    </div>
                   </div>
                 </div>
                 <button

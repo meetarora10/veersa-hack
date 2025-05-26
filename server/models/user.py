@@ -4,7 +4,13 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 from database import db
 from dotenv import load_dotenv
+import os
+from werkzeug.utils import secure_filename
+
 load_dotenv()
+
+UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'uploads', 'profile_images')
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -26,6 +32,7 @@ class User(db.Model):
     emergency_contact_name = db.Column(db.String(100), nullable=True)
     emergency_contact_phone = db.Column(db.String(20), nullable=True)
     emergency_contact_relation = db.Column(db.String(50), nullable=True)
+    image = db.Column(db.String(255), nullable=True)
 
     # appointments_as_patient = db.relationship('Appointment', foreign_keys='Appointment.patient_id', backref='patient', lazy=True)
     # appointments_as_doctor = db.relationship('Appointment', foreign_keys='Appointment.doctor_id', backref='doctor', lazy=True)
@@ -53,5 +60,6 @@ class User(db.Model):
                 'name': self.emergency_contact_name,
                 'phone': self.emergency_contact_phone,
                 'relation': self.emergency_contact_relation
-            }
+            },
+            'image': self.image
         }

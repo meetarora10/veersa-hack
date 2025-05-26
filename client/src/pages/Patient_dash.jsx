@@ -94,7 +94,7 @@ const Patient_dash = () => {
         toggleSidebar={() => setSidebarOpen((prev) => !prev)}
       />
       <div className="flex-1 overflow-auto">
-        <Topbar userRole={patientData ? patientData.name : "Patient"} />
+        <Topbar userRole="Patient" userData={patientData} />
         <main className="p-6">
           {content}
         </main>
