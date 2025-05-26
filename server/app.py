@@ -34,7 +34,11 @@ CORS(
                 "http://127.0.0.1:3000",
                 "https://veersa-hack-c4cr.vercel.app",
                 "https://veersa-hack-c4cr-wa6c7ty2i-meet-aroras-projects.vercel.app"
-            ]
+            ],
+            "supports_credentials": True,
+            "allow_headers": ["Content-Type", "Authorization", "Accept"],
+            "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+            "expose_headers": ["Set-Cookie"]
         },
         r"/uploads/*": {
             "origins": [

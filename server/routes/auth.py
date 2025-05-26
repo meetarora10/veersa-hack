@@ -141,20 +141,15 @@ def login():
                 'role': user.role
             })
             
-            # Check environment for cookie settings
-            env = os.getenv('FLASK_ENV', 'production').lower()
-            is_dev = env == 'development'
-            
-            # Set the JWT cookie with proper settings
             response.set_cookie(
                 'access_token_cookie',
                 access_token,
                 httponly=True,
-                secure=False if is_dev else True,  # False for HTTP in development
-                samesite='None',  # None for cross-site in dev
+                secure=True,  # Required for HTTPS
+                samesite='None',  # Required for cross-site requests
                 max_age=86400,  # 1 day
                 path='/',
-                domain=None  # Allow cookie to work on localhost
+                domain=None  # Allow cookie to work across subdomains
             )
             
             print(f"Login successful for user {user.id}. Token set in cookie.")
