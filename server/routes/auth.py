@@ -80,47 +80,6 @@ def register():
         return jsonify({'success': False, 'message': f'Registration failed: {str(e)}'}), 500
 
 
-# @auth_bp.route('/login', methods=['POST'])
-# def login():
-#     try:
-#         data = request.get_json()
-#         email = data.get('email')
-#         password = data.get('password')
-
-#         if not email or not password:
-#             return jsonify({'success': False, 'message': 'Email and password are required'}), 400
-
-#         user = User.query.filter_by(email=email).first()
-#         if user and user.check_password(password):
-#             access_token = create_access_token(identity=str(user.id))
-#             response = jsonify({
-#                 'success': True, 
-#                 'message': 'Login successful', 
-#                 'id': user.id, 
-#                 'role': user.role
-#             })
-            
-#             # Set the JWT cookie
-#             response.set_cookie(
-#                 'access_token_cookie',
-#                 access_token,
-#                 httponly=True,
-#                 secure=False,  # Set to False for development
-#                 samesite='Lax',
-#                 max_age=86400,  # 1 day
-#                 path='/',
-#                 domain=None  # Allow cookie to work on localhost
-#             )
-            
-#             print(f"Login successful for user {user.id}. Token set in cookie.")
-#             return response
-#         else:
-#             print(f"Login failed for email {email}")
-#             return jsonify({'success': False, 'message': 'Invalid email or password'}), 401
-
-#     except Exception as e:
-#         print(f"Login error: {str(e)}")
-#         return jsonify({'success': False, 'message': f'Login failed: {str(e)}'}), 500
 @auth_bp.route('/login', methods=['POST'])
 def login():
     try:
@@ -133,7 +92,10 @@ def login():
 
         user = User.query.filter_by(email=email).first()
         if user and user.check_password(password):
+            # Create access token
             access_token = create_access_token(identity=str(user.id))
+            
+            # Create response with user data
             response = jsonify({
                 'success': True, 
                 'message': 'Login successful', 
@@ -141,15 +103,16 @@ def login():
                 'role': user.role
             })
             
+            # Set cookie with proper settings
             response.set_cookie(
                 'access_token_cookie',
                 access_token,
                 httponly=True,
-                secure=True,  # Required for HTTPS
-                samesite='None',  # Required for cross-site requests
+                secure=True,
+                samesite='None',
                 max_age=86400,  # 1 day
                 path='/',
-                domain=None  # Allow cookie to work across subdomains
+                domain=None
             )
             
             print(f"Login successful for user {user.id}. Token set in cookie.")
@@ -161,20 +124,19 @@ def login():
     except Exception as e:
         print(f"Login error: {str(e)}")
         return jsonify({'success': False, 'message': f'Login failed: {str(e)}'}), 500
+
 @auth_bp.route('/logout', methods=['POST'])
 def logout():
-    env = os.getenv('FLASK_ENV', 'production').lower()
-    is_dev = env == 'development'
-    
     response = jsonify({'success': True, 'message': 'Logged out successfully'})
     response.set_cookie(
         'access_token_cookie', 
         '', 
         expires=0,
+        httponly=True,
+        secure=True,
+        samesite='None',
         path='/', 
-        domain=None,
-        secure=False if is_dev else True,
-        samesite=None if is_dev else 'Lax'
+        domain=None
     )
     return response
 

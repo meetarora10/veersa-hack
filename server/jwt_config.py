@@ -4,28 +4,19 @@ from datetime import timedelta
 import os
 
 def init_jwt(app):
-    env = os.getenv('FLASK_ENV', 'production').lower()
-    is_dev = env == 'development'
-    
     # JWT Configuration
     app.config['SECRET_KEY'] = os.getenv('JWT_SECRET', 'your-secret-key')
     app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET', 'your-secret-key')
     app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=1)
-    app.config['JWT_TOKEN_LOCATION'] = ['cookies', 'headers']  # Allow both cookies and headers
+    app.config['JWT_TOKEN_LOCATION'] = ['cookies']  # Only use cookies
     app.config['JWT_COOKIE_NAME'] = 'access_token_cookie'
     app.config['JWT_COOKIE_HTTPONLY'] = True
-    
-    app.config['JWT_COOKIE_SAMESITE'] = 'None'
     app.config['JWT_COOKIE_SECURE'] = True
-    
-    app.config['JWT_COOKIE_CSRF_PROTECT'] = not is_dev  # Keep False for development
-    if is_dev:
-        app.config['JWT_COOKIE_DOMAIN'] = None
+    app.config['JWT_COOKIE_SAMESITE'] = 'None'
+    app.config['JWT_COOKIE_CSRF_PROTECT'] = False
+    app.config['JWT_COOKIE_DOMAIN'] = None
     app.config['JWT_ERROR_MESSAGE_KEY'] = 'message'
-    app.config['JWT_JSON_KEY'] = 'access_token'  # Key to use in JSON responses
-    app.config['JWT_HEADER_NAME'] = 'Authorization'  # Header name for JWT
-    app.config['JWT_HEADER_TYPE'] = 'Bearer'  # Token type in header
-    app.config['JWT_ACCESS_COOKIE_PATH'] = '/'  # Make sure cookie is available for all paths including /uploads
+    app.config['JWT_COOKIE_PATH'] = '/'
     
     # Initialize JWT
     jwt = JWTManager(app)
