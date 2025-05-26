@@ -88,7 +88,7 @@ const PatientProfile = ({ patientData, onUpdate }) => {
         formData.append("image", profile.image);
       }
 
-      const res = await fetch("/api/patient/update_profile", {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/patient/update_profile_form`, {
         method: "POST",
         body: formData,
         credentials: "include",

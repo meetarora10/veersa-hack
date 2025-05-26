@@ -3,6 +3,8 @@ from models.user import User
 from models.patient import update_patient_profile
 from models.appointment import Appointment
 from flask_jwt_extended import jwt_required, get_jwt_identity
+from pprint import pprint
+import json
 
 patient_bp = Blueprint('patient', __name__)
 
@@ -55,29 +57,53 @@ def patient_dashboard():
         print(f"Error in patient dashboard: {str(e)}")
         return jsonify({'success': False, 'message': str(e)}), 500
 
-@patient_bp.route('/update_profile', methods=['POST'])
+@patient_bp.route('/update_profile_form', methods=['POST'])
 @jwt_required()
-def update_profile():
+def update_profile_form():
+    from pprint import pprint
+    import json
+
+    print("---- FORM DATA ----")
+    pprint(request.form)
+    print("---- FILES ----")
+    pprint(request.files)
+
     try:
         current_user_id = get_jwt_identity()
         if not current_user_id:
             return jsonify({'success': False, 'message': 'Unauthorized access'}), 401
 
-        data = request.json
-        profile_data = data.get('profile')
-        if not profile_data:
-            return jsonify({'success': False, 'message': 'Missing profile data'}), 400
-
-        # Verify user is a patient
         user = User.query.get(int(current_user_id))
         if not user or user.role != 'patient':
             return jsonify({'success': False, 'message': 'Unauthorized access'}), 403
 
+        profile_data = {
+            "name": request.form.get("name"),
+            "age": request.form.get("age"),
+            "gender": request.form.get("gender"),
+            "email": request.form.get("email"),
+            "phone": request.form.get("phone"),
+            "medicalConditions": json.loads(request.form.get("medicalConditions", "[]")),
+            "emergencyContact": json.loads(request.form.get("emergencyContact", "{}")),
+        }
+        image = request.files.get("image")
+
+        if not profile_data:
+            return jsonify({'success': False, 'message': 'Missing profile data'}), 400
+
+        print(f"Parsed profile data for user {current_user_id}:")
+        pprint(profile_data)
+        if image:
+            print(f"Received image file: {image.filename}")
+
+        # Dummy: pretend to save the profile and image
         success = update_patient_profile(int(current_user_id), profile_data)
+        # You can add your image saving logic here
+
         if success:
-            return jsonify({'success': True, 'message': 'Profile updated'})
+            return jsonify({'success': True, 'message': 'Profile updated (form version)'})
         else:
             return jsonify({'success': False, 'message': 'Update failed'}), 500
     except Exception as e:
-        print(f"Error updating profile: {str(e)}")
+        print(f"Error updating profile (form): {str(e)}")
         return jsonify({'success': False, 'message': str(e)}), 500

@@ -64,7 +64,7 @@ MediBridge offers:
 ---
 
 ## Screenshots
-![image](https://github.com/user-attachments/assets/404461e5-39e3-410a-914b-9ae65ea6ea1b)
+![Screenshot (410)](https://github.com/user-attachments/assets/278b7b45-251a-49c3-a9a9-9df19f05ba7b)
 Sign Up
 ![image](https://github.com/user-attachments/assets/6e24b810-c42d-40f8-ba94-81c2e5316844)
 Login
@@ -81,7 +81,8 @@ Booking Appointment -2
 ![image](https://github.com/user-attachments/assets/4dc9f016-7311-47a4-8393-e7c060b61810)
 Meeting with live transcription and chat
 
-
+## Short Demo
+https://github.com/user-attachments/assets/e06fc83b-08ff-47d3-b154-1ebc6318ffd2
 
 ## DATA MODEL
 ![image](https://github.com/user-attachments/assets/7ce483d9-e740-4e0b-a738-521dbacd6b23)
