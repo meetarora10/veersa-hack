@@ -150,8 +150,8 @@ def login():
                 'access_token_cookie',
                 access_token,
                 httponly=True,
-                secure=True,  # Must be True for SameSite=None
-                samesite='None' if is_dev else 'Lax',  # Use None for cross-site in dev
+                secure=False if is_dev else True,  # False for HTTP in development
+                samesite=None if is_dev else 'Lax',  # None for cross-site in dev
                 max_age=86400,  # 1 day
                 path='/',
                 domain=None  # Allow cookie to work on localhost
@@ -168,8 +168,19 @@ def login():
         return jsonify({'success': False, 'message': f'Login failed: {str(e)}'}), 500
 @auth_bp.route('/logout', methods=['POST'])
 def logout():
+    env = os.getenv('FLASK_ENV', 'production').lower()
+    is_dev = env == 'development'
+    
     response = jsonify({'success': True, 'message': 'Logged out successfully'})
-    response.delete_cookie('access_token_cookie', path='/', domain=None)
+    response.set_cookie(
+        'access_token_cookie', 
+        '', 
+        expires=0,
+        path='/', 
+        domain=None,
+        secure=False if is_dev else True,
+        samesite=None if is_dev else 'Lax'
+    )
     return response
 
 @auth_bp.route('/verify-session', methods=['GET'])
