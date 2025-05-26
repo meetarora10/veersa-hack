@@ -30,6 +30,8 @@ CORS(
         r"/api/*": {
             "origins": [
                 "http://localhost:5173",
+                "http://localhost:3000",
+                "http://127.0.0.1:3000",
                 "https://veersa-hack-c4cr.vercel.app",
                 "https://veersa-hack-c4cr-wa6c7ty2i-meet-aroras-projects.vercel.app"
             ]
@@ -37,6 +39,8 @@ CORS(
         r"/uploads/*": {
             "origins": [
                 "http://localhost:5173",
+                "http://localhost:3000",
+                "http://127.0.0.1:3000",
                 "https://veersa-hack-c4cr.vercel.app",
                 "https://veersa-hack-c4cr-wa6c7ty2i-meet-aroras-projects.vercel.app"
             ],
