@@ -22,7 +22,7 @@ load_dotenv()
 app = Flask(__name__)
 app.register_blueprint(patient_bp, url_prefix='/api/patient', name='patient_v2')
 app.register_blueprint(payment_bp)
-CORS(app, supports_credentials=True, origins=['http://localhost:5173'], allow_headers=['Content-Type'], methods=['GET', 'POST', 'OPTIONS'])
+CORS(app, supports_credentials=True, origins=['http://localhost:5173','https://veersa-hack-c4cr.vercel.app/'], allow_headers=['Content-Type'], methods=['GET', 'POST', 'OPTIONS'])
 app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024  # 10MB max file size
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
