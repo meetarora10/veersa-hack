@@ -20,7 +20,24 @@ const DoctorHome = ({ userProfile, appointments }) => {
       isAfter(now, fiveMinBefore) &&
       isBefore(now, addMinutes(apptDateTime, 60));
   }
-
+  const handleJoinCall = async () => {
+    const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/create-room`, {
+      method: 'POST',
+      credentials: "include",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ appointment_id: nextAppointment.id }),
+    });
+    const data = await res.json();
+    if (data.data && data.data.url) {
+      const urlParts = data.data.url.split('/');
+      const roomId = urlParts[urlParts.length - 1];
+      navigate(`/meet/${roomId}`, { state: { meetingUrl: data.data.url, userRole: "doctor" } });
+    } else {
+      alert("Could not start meeting.");
+    }
+  };
   return (
     <div className="p-6 bg-white rounded-lg shadow-lg space-y-6">
       <div className="flex items-center justify-between flex-wrap gap-2">
@@ -58,6 +75,7 @@ const DoctorHome = ({ userProfile, appointments }) => {
                   : "bg-gray-300 text-gray-500 cursor-not-allowed"
               }`}
               disabled={!joinEnabled}
+              onClick={handleJoinCall}
             >
               Join Call
             </button>

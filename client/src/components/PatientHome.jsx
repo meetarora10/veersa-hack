@@ -30,8 +30,13 @@ const PatientHome = ({ userProfile, appointments= [] }) => {
   const handleJoinCall = async () => {
     // Fetch/create a Daily.co room from backend
     const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/create-room`, {
-      method: 'GET', 
-      credentials: "include"
+      method: 'POST', 
+      credentials: "include",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ appointment_id: nextAppointment.id }),
+
     });
     const data = await res.json();
     // Use the correct path to the URL

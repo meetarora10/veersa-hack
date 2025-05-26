@@ -9,8 +9,8 @@ from models.user import User
 meeting_bp = Blueprint('meeting', __name__)
 
 DAILY_API_KEY = os.getenv("DAILY_API_KEY")
-
-@meeting_bp.route('/api/create-room', methods=['GET'])
+appointment_rooms = {}
+@meeting_bp.route('/api/create-room', methods=['POST'])
 @jwt_required()
 def create_room():
     try:
@@ -22,6 +22,15 @@ def create_room():
         user = User.query.get(int(current_user_id))
         if not user:
             return jsonify({"success": False, "message": "User not found"}), 401
+        
+        data = flask_request.get_json()
+        appointment_id = data.get("appointment_id")
+        if not appointment_id:
+            return jsonify({"success": False, "message": "Appointment ID is required"}), 400
+        if appointment_id in appointment_rooms:
+            return jsonify({"success": True, "data": {"url": appointment_rooms[appointment_id]}}), 200
+        
+        
 
         if not DAILY_API_KEY:
             print("Error: DAILY_API_KEY is not set")
