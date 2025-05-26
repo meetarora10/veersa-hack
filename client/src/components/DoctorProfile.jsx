@@ -1,9 +1,10 @@
 import React, { useState, useRef } from "react";
 import { User, Camera } from "lucide-react";
-
+import DoctorAvailableSlots from "./DoctorAvailableSlots";
 const DoctorProfile = ({ userData = {}, onUpdate }) => {
   const [editMode, setEditMode] = useState(false);
   const [profile, setProfile] = useState({
+    id: userData.id || '',
     name: userData.name || '',
     age: userData.age || '',
     gender: userData.gender || '',
@@ -13,7 +14,7 @@ const DoctorProfile = ({ userData = {}, onUpdate }) => {
   });
   const [preview, setPreview] = useState(userData.image || null);
   const fileInputRef = useRef(null);
-
+  console.log(userData);
   const handleChange = (e) => {
     setProfile({ ...profile, [e.target.name]: e.target.value });
   };
@@ -189,6 +190,12 @@ const DoctorProfile = ({ userData = {}, onUpdate }) => {
                 {profile.price ? `₹${profile.price}` : 'Not set'}
               </span>
             </p>
+            <div className="flex justify-between">
+              <span className="font-medium">Available Slots:</span>
+              <span>
+                <DoctorAvailableSlots doctorId={profile.id} />
+              </span>
+            </div>
           </div>
           <button
             className="w-full bg-blue-500 hover:bg-blue-600 text-white px-4 py-3 rounded-lg font-medium transition-colors mt-4"

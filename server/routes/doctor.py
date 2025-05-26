@@ -12,9 +12,10 @@ def doctor_dashboard():
         return jsonify({'success': False, 'message': 'Unauthorized access'}), 403
 
     # Fetch doctor-specific data
-    doctor = User.query.get(session['user_id'])
+    doctor = User.query.filter_by(id=session['user_id']).first()
     if not doctor:
         return jsonify({'success': False, 'message': 'Doctor not found'}), 404
+    
 
     # Example data to return
     # Fetch appointments for this doctor
@@ -30,12 +31,15 @@ def doctor_dashboard():
             'status': appt.status,
         })
     data = {
+        'id': doctor.id,
         'name': doctor.name,
         'age': doctor.age,
         'gender': doctor.gender,
         'specialization': doctor.specialization,
         'appointments': appointments_data,
     }
+    print(f"Doctor object: {doctor}")  # Debug line
+    print(f"Doctor id: {doctor.id}")
     return jsonify({'success': True, 'data': data}), 200
 @doctor_bp.route('/api/available_slots', methods=['GET'])
 def get_available_slots():
@@ -59,8 +63,8 @@ def get_available_slots():
         # to get the booked appointment
         booked_appointments = Appointment.query.filter_by(doctor_id=doctor_id, date=date).all()
         # extract time from both availabilty and booked appointments
-        available_slots = [slot.time_slot for slot in availability]
-        booked_slots = [appt.time for appt in booked_appointments]
+        available_slots = [str(slot.time_slot) for slot in availability]
+        booked_slots = [str(appt.time) for appt in booked_appointments]
         # remove booked slots from available slots
         free_slots = [slot for slot in available_slots if slot not in booked_slots]
         print("Available slots from DB:", [slot.time_slot for slot in availability])
