@@ -16,6 +16,7 @@ function ChatBox({ onClose, userRole }) {
   const [roomInfo, setRoomInfo] = useState(null);
   const daily = useDaily();
   const [previewFile, setPreviewFile] = useState(null);
+  
 
   useEffect(() => {
     async function fetchRoomInfo() {
@@ -85,10 +86,16 @@ function ChatBox({ onClose, userRole }) {
     e.preventDefault();
     if (!newMessage.trim() || !socket || !roomInfo?.name) return;
 
+    const senderRole =
+      userRole ||
+      localStorage.getItem("userRole") ||
+      daily.participants().local?.user_name ||
+      "Anonymous";
+
     socket.emit("message", {
       content: newMessage,
       roomId: roomInfo.name,
-      sender: userRole || daily.participants().local?.user_name || "Anonymous",
+      sender: senderRole,
     });
 
     setNewMessage("");
@@ -119,13 +126,18 @@ function ChatBox({ onClose, userRole }) {
           const response = JSON.parse(xhr.responseText);
           console.log('File upload successful, data:', response);
           if (socket && response.success && response.data) {
+            const senderRole =
+              userRole ||
+              localStorage.getItem("userRole") ||
+              daily.participants().local?.user_name ||
+              "Anonymous";
             const fileMessage = {
               type: "file",
               fileName: response.data.fileName,
               uniqueFileName: response.data.uniqueFileName,
               fileUrl: response.data.fileUrl,
               roomId: roomInfo.name,
-              sender: userRole || daily.participants().local?.user_name || "Anonymous",
+              sender: senderRole,
             };
             console.log('Emitting file message:', fileMessage);
             socket.emit("file", fileMessage);
@@ -197,6 +209,7 @@ function ChatBox({ onClose, userRole }) {
   if (!roomInfo?.name) {
     return null;
   }
+  
 
   return (
     <div
@@ -227,7 +240,8 @@ function ChatBox({ onClose, userRole }) {
             <div className="flex-1 bg-secondary dark:bg-dark-secondary p-3 rounded-lg">
               <div className="flex justify-between items-start mb-1">
                 <span className="text-sm font-medium text-primary">
-                  {message.sender || "Patient"}
+                  
+                  {message.sender}
                 </span>
                 <span className="text-xs text-accent dark:text-dark-accent">
                   {new Date(message.timestamp).toLocaleTimeString()}

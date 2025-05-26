@@ -79,19 +79,8 @@ const VideoCallContent = ({ roomUrl, userRole, onLeaveCall }) => {
             second: "2-digit",
           });
 
-          // Defensive participant name lookup
-          let name = userRole.charAt(0).toUpperCase() + userRole.slice(1);
-          //   if (
-          //     callFrameRef.current &&
-          //     typeof callFrameRef.current.participants === 'function'
-          //   ) {
-          //     const participants = callFrameRef.current.participants();
-          //       console.log(participants);
-          //       console.log(participants[ev.participantId]);
-          //     if (participants && participants[ev.participantId]) {
-          //       name = participants[ev.participantId].user_name || ev.participantId;
-          //     }
-          //   }
+  let name = ev.participantId; 
+  
 
           if (spokenText) {
             const formattedLine = `[${timestamp}] ${name}: ${spokenText}`;

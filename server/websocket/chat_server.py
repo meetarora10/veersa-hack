@@ -28,6 +28,7 @@ class ChatServer:
         def handle_message(data):
             room_id = data.get('roomId')
             content = data.get('content')
+            sender = data.get('sender')
             
             if room_id and content:
                 message = {
@@ -35,7 +36,8 @@ class ChatServer:
                     'id': str(uuid.uuid4()),
                     'content': content,
                     'timestamp': datetime.utcnow().isoformat(),
-                    'roomId': room_id
+                    'roomId': room_id,
+                    'sender': sender
                 }
                 emit('message', message, room=room_id)
 
