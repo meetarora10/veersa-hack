@@ -31,8 +31,8 @@ export default function SquarePaymentForm({ amount, onSuccess, onError, disabled
         }
       }}
       createPaymentRequest={() => ({
-        countryCode: "IN",
-        currencyCode: "INR",
+        countryCode: "US",
+        currencyCode: "USD",
         total: {
           amount: amount.toString(),
           label: "Total",
