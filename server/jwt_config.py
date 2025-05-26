@@ -15,18 +15,12 @@ def init_jwt(app):
     app.config['JWT_COOKIE_NAME'] = 'access_token_cookie'
     app.config['JWT_COOKIE_HTTPONLY'] = True
     
-    # Fix for cross-site cookie issues in development
-    if is_dev:
-        app.config['JWT_COOKIE_SAMESITE'] = 'None'  # Changed from 'Lax' to 'None'
-        app.config['JWT_COOKIE_SECURE'] = True       # Must be True when SameSite=None
-    else:
-        app.config['JWT_COOKIE_SAMESITE'] = 'Lax'
-        app.config['JWT_COOKIE_SECURE'] = True
+    app.config['JWT_COOKIE_SAMESITE'] = 'None'
+    app.config['JWT_COOKIE_SECURE'] = True
     
-    app.config['JWT_COOKIE_CSRF_PROTECT'] = False  # Keep False for development
+    app.config['JWT_COOKIE_CSRF_PROTECT'] = not is_dev  # Keep False for development
     app.config['JWT_COOKIE_DOMAIN'] = None  # Allow cookies to work on localhost
     app.config['JWT_ERROR_MESSAGE_KEY'] = 'message'
-    app.config['JWT_COOKIE_PATH'] = '/'  # Ensure cookie is available for all paths
     app.config['JWT_JSON_KEY'] = 'access_token'  # Key to use in JSON responses
     app.config['JWT_HEADER_NAME'] = 'Authorization'  # Header name for JWT
     app.config['JWT_HEADER_TYPE'] = 'Bearer'  # Token type in header
