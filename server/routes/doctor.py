@@ -13,11 +13,12 @@ doctor_bp = Blueprint('doctor', __name__)
 def doctor_dashboard():
     try:
         current_user_id = get_jwt_identity()
+        print("id",current_user_id)
         if not current_user_id:
             return jsonify({'success': False, 'message': 'Unauthorized access'}), 401
 
         # Fetch doctor-specific data
-        doctor = User.query.get(int(current_user_id))
+        doctor= User.query.filter_by(id=int(current_user_id), role='doctor').first()
         if not doctor or doctor.role != 'doctor':
             return jsonify({'success': False, 'message': 'Unauthorized access'}), 403
 
@@ -35,6 +36,7 @@ def doctor_dashboard():
             })
 
         data = {
+            'id': doctor.id,
             'name': doctor.name,
             'age': doctor.age,
             'gender': doctor.gender,
@@ -42,6 +44,8 @@ def doctor_dashboard():
             'price': doctor.price,
             'appointments': appointments_data,
         }
+        print(f"Doctor object: {doctor}")  # Debug line
+        print(f"Doctor id: {doctor.id}")
         return jsonify({'success': True, 'data': data}), 200
     except Exception as e:
         print(f"Error in doctor dashboard: {str(e)}")

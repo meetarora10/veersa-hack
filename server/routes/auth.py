@@ -6,7 +6,7 @@ from models.user import User
 from models.schedule import Schedule
 from database import db
 from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_token, set_access_cookies
-
+import os
 auth_bp = Blueprint('auth', __name__)
 
 @auth_bp.route('/register', methods=['POST'])
@@ -80,6 +80,47 @@ def register():
         return jsonify({'success': False, 'message': f'Registration failed: {str(e)}'}), 500
 
 
+# @auth_bp.route('/login', methods=['POST'])
+# def login():
+#     try:
+#         data = request.get_json()
+#         email = data.get('email')
+#         password = data.get('password')
+
+#         if not email or not password:
+#             return jsonify({'success': False, 'message': 'Email and password are required'}), 400
+
+#         user = User.query.filter_by(email=email).first()
+#         if user and user.check_password(password):
+#             access_token = create_access_token(identity=str(user.id))
+#             response = jsonify({
+#                 'success': True, 
+#                 'message': 'Login successful', 
+#                 'id': user.id, 
+#                 'role': user.role
+#             })
+            
+#             # Set the JWT cookie
+#             response.set_cookie(
+#                 'access_token_cookie',
+#                 access_token,
+#                 httponly=True,
+#                 secure=False,  # Set to False for development
+#                 samesite='Lax',
+#                 max_age=86400,  # 1 day
+#                 path='/',
+#                 domain=None  # Allow cookie to work on localhost
+#             )
+            
+#             print(f"Login successful for user {user.id}. Token set in cookie.")
+#             return response
+#         else:
+#             print(f"Login failed for email {email}")
+#             return jsonify({'success': False, 'message': 'Invalid email or password'}), 401
+
+#     except Exception as e:
+#         print(f"Login error: {str(e)}")
+#         return jsonify({'success': False, 'message': f'Login failed: {str(e)}'}), 500
 @auth_bp.route('/login', methods=['POST'])
 def login():
     try:
@@ -100,13 +141,17 @@ def login():
                 'role': user.role
             })
             
-            # Set the JWT cookie
+            # Check environment for cookie settings
+            env = os.getenv('FLASK_ENV', 'production').lower()
+            is_dev = env == 'development'
+            
+            # Set the JWT cookie with proper settings
             response.set_cookie(
                 'access_token_cookie',
                 access_token,
                 httponly=True,
-                secure=False,  # Set to False for development
-                samesite='Lax',
+                secure=True,  # Must be True for SameSite=None
+                samesite='None' if is_dev else 'Lax',  # Use None for cross-site in dev
                 max_age=86400,  # 1 day
                 path='/',
                 domain=None  # Allow cookie to work on localhost
@@ -121,7 +166,6 @@ def login():
     except Exception as e:
         print(f"Login error: {str(e)}")
         return jsonify({'success': False, 'message': f'Login failed: {str(e)}'}), 500
-
 @auth_bp.route('/logout', methods=['POST'])
 def logout():
     response = jsonify({'success': True, 'message': 'Logged out successfully'})

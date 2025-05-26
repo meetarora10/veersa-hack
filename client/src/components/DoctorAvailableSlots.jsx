@@ -35,9 +35,15 @@ function DoctorAvailableSlots({ doctorId }) {
     }
 
     const fetchSlots = async () => {
+        const token = localStorage.getItem("access_token");
       try {
         const res = await axios.get(
-          `${import.meta.env.VITE_BACKEND_URL}/api/available_slots?doctor_id=${doctorId}&date=${selectedDate}`
+          `${import.meta.env.VITE_BACKEND_URL}/api/available_slots?doctor_id=${doctorId}&date=${selectedDate}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
         );
 
         if (res.data.success) {
