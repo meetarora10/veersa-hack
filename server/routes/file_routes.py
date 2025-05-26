@@ -6,6 +6,8 @@ from datetime import datetime
 import fs
 from fs.osfs import OSFS
 import io
+from flask_jwt_extended import jwt_required, get_jwt_identity
+from models.user import User
 
 file_routes = Blueprint('file_routes', __name__)
 
@@ -24,23 +26,33 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @file_routes.route('/upload', methods=['POST', 'OPTIONS'])
+@jwt_required()
 def upload_file():
     if request.method == 'OPTIONS':
         return '', 200
         
     try:
+        current_user_id = get_jwt_identity()
+        if not current_user_id:
+            return jsonify({'success': False, 'message': 'Unauthorized access'}), 401
+
+        # Verify user exists
+        user = User.query.get(int(current_user_id))
+        if not user:
+            return jsonify({'success': False, 'message': 'User not found'}), 401
+
         if 'file' not in request.files:
-            return jsonify({'error': 'No file part'}), 400
+            return jsonify({'success': False, 'message': 'No file part'}), 400
         
         file = request.files['file']
         if file.filename == '':
-            return jsonify({'error': 'No selected file'}), 400
+            return jsonify({'success': False, 'message': 'No selected file'}), 400
         
         if not file:
-            return jsonify({'error': 'Invalid file'}), 400
+            return jsonify({'success': False, 'message': 'Invalid file'}), 400
             
         if not allowed_file(file.filename):
-            return jsonify({'error': 'File type not allowed'}), 400
+            return jsonify({'success': False, 'message': 'File type not allowed'}), 400
             
         filename = secure_filename(file.filename)
         unique_filename = f"{uuid.uuid4()}-{filename}"
@@ -60,23 +72,34 @@ def upload_file():
             'fileUrl': f'/api/files/download/{unique_filename}',
             'uploadDate': datetime.utcnow().isoformat(),
             'size': file_info.size,
-            'mimeType': file.content_type
+            'mimeType': file.content_type,
+            'uploadedBy': current_user_id
         }
         
-        return jsonify(file_data)
+        return jsonify({'success': True, 'data': file_data})
         
     except Exception as e:
         current_app.logger.error(f"File upload error: {str(e)}")
-        return jsonify({'error': 'File upload failed', 'details': str(e)}), 500
+        return jsonify({'success': False, 'message': str(e)}), 500
 
 @file_routes.route('/download/<filename>', methods=['GET', 'OPTIONS'])
+@jwt_required()
 def download_file(filename):
     if request.method == 'OPTIONS':
         return '', 200
         
     try:
+        current_user_id = get_jwt_identity()
+        if not current_user_id:
+            return jsonify({'success': False, 'message': 'Unauthorized access'}), 401
+
+        # Verify user exists
+        user = User.query.get(int(current_user_id))
+        if not user:
+            return jsonify({'success': False, 'message': 'User not found'}), 401
+
         if not fs_instance.exists(filename):
-            return jsonify({'error': 'File not found'}), 404
+            return jsonify({'success': False, 'message': 'File not found'}), 404
         
         # Read file using fs
         with fs_instance.open(filename, 'rb') as f:
@@ -122,4 +145,4 @@ def download_file(filename):
         
     except Exception as e:
         current_app.logger.error(f"File download error: {str(e)}")
-        return jsonify({'error': 'File download failed', 'details': str(e)}), 500 
+        return jsonify({'success': False, 'message': str(e)}), 500 

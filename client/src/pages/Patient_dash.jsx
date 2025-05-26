@@ -25,6 +25,10 @@ const Patient_dash = () => {
         const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/patient/dashboard`, {
           method: 'GET',
           credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          }
         });
           const data = await res.json();
           console.log("Patient data", data);

@@ -5,7 +5,7 @@ import ChatBox from "./ChatBox";
 import Transcription from "./Transcription";
 
 // Separate component for the video call content
-const VideoCallContent = ({ roomUrl, userRole }) => {
+const VideoCallContent = ({ roomUrl, userRole, onLeaveCall }) => {
   const containerRef = useRef(null);
   const callFrameRef = useRef(null);
   const [loading, setLoading] = useState(true);
@@ -24,6 +24,7 @@ const VideoCallContent = ({ roomUrl, userRole }) => {
         `${import.meta.env.VITE_BACKEND_URL}/api/transcription/start/${roomName}`,
         {
           method: "POST",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
           },
@@ -109,6 +110,9 @@ const VideoCallContent = ({ roomUrl, userRole }) => {
 
         callFrameRef.current.on("left-meeting", () => {
           setIsJoined(false);
+          if (onLeaveCall) {
+            onLeaveCall();
+          }
         });
 
         // Join the call
@@ -128,7 +132,7 @@ const VideoCallContent = ({ roomUrl, userRole }) => {
         callFrameRef.current = null;
       }
     };
-  }, [roomUrl]);
+  }, [roomUrl, onLeaveCall]);
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -152,10 +156,10 @@ const VideoCallContent = ({ roomUrl, userRole }) => {
 };
 
 // Main wrapper component
-const SessionWrapper = ({ roomUrl, userRole }) => {
+const SessionWrapper = ({ roomUrl, userRole, onLeaveCall }) => {
   return (
     <DailyProvider>
-      <VideoCallContent roomUrl={roomUrl} userRole={userRole} />
+      <VideoCallContent roomUrl={roomUrl} userRole={userRole} onLeaveCall={onLeaveCall} />
     </DailyProvider>
   );
 };

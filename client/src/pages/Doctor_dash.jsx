@@ -21,6 +21,7 @@ const DoctorDashboard = () => {
           credentials: 'include',
         });
         const data = await res.json();
+        console.log(data.data);
         if (data.success) {
           setUserData(data.data);
           setAppointments(data.data.appointments || []);

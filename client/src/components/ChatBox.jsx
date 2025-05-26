@@ -53,8 +53,12 @@ function ChatBox({ onClose, userRole }) {
     });
 
     socket.on("file", (fileMessage) => {
+      console.log('Received file message:', fileMessage);
       if (fileMessage.roomId === roomInfo.name) {
+        console.log('Adding file message to chat:', fileMessage);
         setMessages((prev) => [...prev, fileMessage]);
+      } else {
+        console.log('Room ID mismatch:', { received: fileMessage.roomId, current: roomInfo.name });
       }
     });
 
@@ -102,7 +106,7 @@ function ChatBox({ onClose, userRole }) {
 
     try {
       const xhr = new XMLHttpRequest();
-      
+      xhr.withCredentials = true;
       xhr.upload.onprogress = (event) => {
         if (event.lengthComputable) {
           const progress = Math.round((event.loaded * 100) / event.total);
@@ -112,15 +116,21 @@ function ChatBox({ onClose, userRole }) {
 
       xhr.onload = async () => {
         if (xhr.status === 200) {
-          const fileData = JSON.parse(xhr.responseText);
-          if (socket) {
-            socket.emit("file", {
-              fileName: fileData.fileName,
-              uniqueFileName: fileData.uniqueFileName,
-              fileUrl: fileData.fileUrl,
+          const response = JSON.parse(xhr.responseText);
+          console.log('File upload successful, data:', response);
+          if (socket && response.success && response.data) {
+            const fileMessage = {
+              type: "file",
+              fileName: response.data.fileName,
+              uniqueFileName: response.data.uniqueFileName,
+              fileUrl: response.data.fileUrl,
               roomId: roomInfo.name,
               sender: userRole || daily.participants().local?.user_name || "Anonymous",
-            });
+            };
+            console.log('Emitting file message:', fileMessage);
+            socket.emit("file", fileMessage);
+          } else {
+            console.error("Invalid response format or missing data:", response);
           }
         } else {
           console.error("File upload failed:", xhr.statusText);
@@ -217,7 +227,7 @@ function ChatBox({ onClose, userRole }) {
             <div className="flex-1 bg-secondary dark:bg-dark-secondary p-3 rounded-lg">
               <div className="flex justify-between items-start mb-1">
                 <span className="text-sm font-medium text-primary">
-                  {message.sender || "Anonymous"}
+                  {message.sender || "Patient"}
                 </span>
                 <span className="text-xs text-accent dark:text-dark-accent">
                   {new Date(message.timestamp).toLocaleTimeString()}

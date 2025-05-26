@@ -42,7 +42,13 @@ const BookAppointment = () => {
     const fetchDoctor = async () => {
       try {
         let res = await fetch(
-          `${import.meta.env.VITE_BACKEND_URL}/api/doctors?id=${doctorId}`
+          `${import.meta.env.VITE_BACKEND_URL}/api/doctors?id=${doctorId}`,
+          {
+            credentials: 'include',
+            headers: {
+              'Accept': 'application/json'
+            }
+          }
         );
         let data = await res.json();
         let doc = Array.isArray(data)
@@ -61,32 +67,37 @@ const BookAppointment = () => {
       }
     };
     fetchDoctor();
-    
   }, [doctorId]);
   useEffect(() => {
-  // Fetch available slots when date changes
-  const fetchSlots = async () => {
-    if (!formData.date) return;
+    // Fetch available slots when date changes
+    const fetchSlots = async () => {
+      if (!formData.date) return;
 
-    try {
-      const res = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/api/available_slots?doctor_id=${doctorId}&date=${formData.date}`
-      );
-      if (res.data.success && res.data.available_slots.length > 0) {
-        setAvailableSlots(res.data.available_slots);
-      } else {
+      try {
+        const res = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/api/available_slots?doctor_id=${doctorId}&date=${formData.date}`,
+          {
+            withCredentials: true,
+            headers: {
+              'Accept': 'application/json'
+            }
+          }
+        );
+        if (res.data.success && res.data.available_slots.length > 0) {
+          setAvailableSlots(res.data.available_slots);
+        } else {
+          setAvailableSlots([]);
+          alert("No available slots for this date");
+          console.log("No available slots:", res.data.error);
+        }
+      } catch (err) {
         setAvailableSlots([]);
-        alert("No available slots for this date");
-        console.log("No available slots:", res.data.error);
+        console.error("Error fetching slots:", err);
       }
-    } catch (err) {
-      setAvailableSlots([]);
-      console.error("Error fetching slots:", err);
-    }
-  };
+    };
 
-  fetchSlots();
-}, [formData.date, doctorId]);
+    fetchSlots();
+  }, [formData.date, doctorId]);
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -225,13 +236,23 @@ const BookAppointment = () => {
     setIsLoading(true);
 
     try {
-      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/appointments`, {
-        ...formData,
-        patient_id,
-        doctor_id: doctor.id,
-        payment_status: 'completed',
-        amount: doctor.price
-      });
+      const res = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/appointments`,
+        {
+          ...formData,
+          patient_id,
+          doctor_id: doctor.id,
+          payment_status: 'completed',
+          amount: doctor.price
+        },
+        {
+          withCredentials: true,
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          }
+        }
+      );
 
       if (res.data.success) {
         alert(res.data.message || "Booking confirmed successfully!");

@@ -13,6 +13,7 @@ const DoctorProfile = ({ userData = {}, onUpdate }) => {
   });
   const [preview, setPreview] = useState(userData.image || null);
   const fileInputRef = useRef(null);
+  console.log(profile);
 
   const handleChange = (e) => {
     setProfile({ ...profile, [e.target.name]: e.target.value });

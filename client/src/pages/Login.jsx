@@ -1,16 +1,31 @@
-import React from 'react'
+import React, { useEffect } from 'react';
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
+import { checkSession } from '../utils/auth';
 
 function Login() {
     const navigate = useNavigate();
+    const location = useLocation();
     const [formData, setFormData] = useState({
         email: '',
         password: '',
     });
     const [message, setMessage] = useState('');
     const [success, setSuccess] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        const checkExistingSession = async () => {
+            const sessionData = await checkSession();
+            if (sessionData) {
+                const from = location.state?.from?.pathname || 
+                    (sessionData.role === 'doctor' ? '/doctor_dashboard' : '/patient_dashboard');
+                navigate(from, { replace: true });
+            }
+            setIsLoading(false);
+        };
+        checkExistingSession();
+    }, [navigate, location]);
 
     const handleChange = (e) => {
         setFormData((prev) => ({
@@ -43,6 +58,9 @@ function Login() {
                 if (data.id) {
                     localStorage.setItem("userId", data.id);
                 }
+                if (data.role) {
+                    localStorage.setItem("userRole", data.role);
+                }
                 
                 if (data.role === 'doctor') {
                     navigate('/doctor_dashboard');
@@ -64,6 +82,14 @@ function Login() {
             setIsLoading(false);
         }
     };
+
+    if (isLoading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 flex items-center justify-center p-4">
@@ -148,22 +174,6 @@ function Login() {
                                 </div>
                             </div>
                         </div>
-                        {/* <div className="flex items-center justify-between">
-                            <div className="flex items-center">
-                                <input
-                                    id="remember-me"
-                                    name="remember-me"
-                                    type="checkbox"
-                                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                                />
-                                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
-                                    Remember me
-                                </label>
-                            </div>
-                            <Link to="/forgot-password" className="text-sm text-blue-600 hover:text-blue-800 font-medium hover:underline">
-                                Forgot password?
-                            </Link>
-                        </div> */}
 
                         <button
                             type="submit"

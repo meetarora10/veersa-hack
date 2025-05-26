@@ -30,14 +30,15 @@ const PatientHome = ({ userProfile, appointments= [] }) => {
   const handleJoinCall = async () => {
     // Fetch/create a Daily.co room from backend
     const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/create-room`, {
-      credentials: "include",
+      method: 'GET', 
+      credentials: "include"
     });
     const data = await res.json();
-    if (data.url) {
-      // Extract the real Daily room ID from the URL
-      const urlParts = data.url.split('/');
+    // Use the correct path to the URL
+    if (data.data && data.data.url) {
+      const urlParts = data.data.url.split('/');
       const roomId = urlParts[urlParts.length - 1];
-      navigate(`/meet/${roomId}`, { state: { meetingUrl: data.url, userRole: "patient" } });
+      navigate(`/meet/${roomId}`, { state: { meetingUrl: data.data.url, userRole: "patient" } });
     } else {
       alert("Could not start meeting.");
     }

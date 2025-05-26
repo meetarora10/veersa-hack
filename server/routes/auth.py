@@ -5,6 +5,7 @@ from werkzeug.security import generate_password_hash
 from models.user import User
 from models.schedule import Schedule
 from database import db
+from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_token, set_access_cookies
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -74,12 +75,73 @@ def login():
 
         user = User.query.filter_by(email=email).first()
         if user and user.check_password(password):
-            session['user_id'] = user.id
-            session['role'] = user.role
-            session.permanent = True
-            return jsonify({'success': True, 'message': 'Login successful', 'id': user.id, 'role': user.role}), 200
+            access_token = create_access_token(identity=str(user.id))
+            response = jsonify({
+                'success': True, 
+                'message': 'Login successful', 
+                'id': user.id, 
+                'role': user.role
+            })
+            
+            # Set the JWT cookie
+            response.set_cookie(
+                'access_token_cookie',
+                access_token,
+                httponly=True,
+                secure=False,  # Set to False for development
+                samesite='Lax',
+                max_age=86400,  # 1 day
+                path='/',
+                domain=None  # Allow cookie to work on localhost
+            )
+            
+            print(f"Login successful for user {user.id}. Token set in cookie.")
+            return response
         else:
+            print(f"Login failed for email {email}")
             return jsonify({'success': False, 'message': 'Invalid email or password'}), 401
 
     except Exception as e:
+        print(f"Login error: {str(e)}")
         return jsonify({'success': False, 'message': f'Login failed: {str(e)}'}), 500
+
+@auth_bp.route('/logout', methods=['POST'])
+def logout():
+    response = jsonify({'success': True, 'message': 'Logged out successfully'})
+    response.delete_cookie('access_token_cookie', path='/', domain=None)
+    return response
+
+@auth_bp.route('/verify-session', methods=['GET'])
+@jwt_required()
+def verify_session():
+    try:
+        current_user_id = get_jwt_identity()
+        print(f"Verifying session for user ID: {current_user_id}, type: {type(current_user_id)}")
+        
+        if not current_user_id:
+            print("No user ID found in token")
+            return jsonify({'success': False, 'message': 'Invalid token'}), 401
+            
+        try:
+            # Convert string ID back to integer for database query
+            user_id = int(current_user_id)
+            user = User.query.get(user_id)
+            
+            if not user:
+                print(f"User not found for ID: {user_id}")
+                return jsonify({'success': False, 'message': 'User not found'}), 401
+                
+            print(f"Session verified for user: {user.name}")
+            return jsonify({
+                'success': True,
+                'id': user.id,
+                'role': user.role,
+                'name': user.name
+            })
+        except ValueError as e:
+            print(f"Invalid user ID format: {current_user_id}")
+            return jsonify({'success': False, 'message': 'Invalid user ID format'}), 401
+            
+    except Exception as e:
+        print(f"Session verification error: {str(e)}")
+        return jsonify({'success': False, 'message': str(e)}), 401

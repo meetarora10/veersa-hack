@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import useDebounce from "../utils/Debounce";
+import { FaClock, FaCalendarAlt } from "react-icons/fa";
 
 function SearchDoctor() {
   const [specialty, setSpecialty] = useState("");
@@ -25,7 +26,13 @@ function SearchDoctor() {
       setLoading(true);
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_BACKEND_URL}/api/doctors?specialization=${debouncedSpecialty}`
+          `${import.meta.env.VITE_BACKEND_URL}/api/doctors?specialization=${debouncedSpecialty}`,
+          {
+            credentials: 'include',
+            headers: {
+              'Accept': 'application/json'
+            }
+          }
         );
         if (!response.ok) throw new Error("Error fetching doctors");
         const data = await response.json();
@@ -38,6 +45,17 @@ function SearchDoctor() {
     };
     fetchDoctors();
   }, [debouncedSpecialty]);
+
+  const formatAvailability = (availability) => {
+    if (!availability) return "No availability set";
+    
+    const days = Object.entries(availability).map(([day, slots]) => {
+      if (!slots || slots.length === 0) return null;
+      return `${day}: ${slots.join(", ")}`;
+    }).filter(Boolean);
+
+    return days.length > 0 ? days.join(" | ") : "No availability set";
+  };
 
   return (
     <div>
@@ -72,7 +90,7 @@ function SearchDoctor() {
                 key={doctor.id}
                 className="p-5 bg-blue-100 rounded-xl shadow flex flex-col sm:flex-row sm:items-center sm:justify-between"
               >
-                <div>
+                <div className="flex-1">
                   <h3 className="text-xl font-semibold text-blue-900">
                     {doctor.name}
                   </h3>
@@ -86,6 +104,15 @@ function SearchDoctor() {
                       ₹{doctor.price ? doctor.price.toFixed(2) : "N/A"}
                     </span>
                   </p>
+                  <div className="mt-2 text-sm text-blue-600">
+                    <div className="flex items-center gap-1">
+                      <FaCalendarAlt className="text-blue-500" />
+                      <span className="font-medium">Availability:</span>
+                    </div>
+                    <p className="ml-5 mt-1 text-blue-700">
+                      {formatAvailability(doctor.availability)}
+                    </p>
+                  </div>
                 </div>
                 <button
                   className="mt-3 sm:mt-0 bg-green-500 text-white px-5 py-2 rounded-lg font-semibold hover:bg-green-600 transition"
