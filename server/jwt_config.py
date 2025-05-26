@@ -4,6 +4,8 @@ from datetime import timedelta
 import os
 
 def init_jwt(app):
+    env = os.getenv('FLASK_ENV', 'production').lower()
+    is_dev = env == 'development'
     # JWT Configuration
     app.config['SECRET_KEY'] = os.getenv('JWT_SECRET', 'your-secret-key')
     app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET', 'your-secret-key')
@@ -11,8 +13,8 @@ def init_jwt(app):
     app.config['JWT_TOKEN_LOCATION'] = ['cookies', 'headers']  # Allow both cookies and headers
     app.config['JWT_COOKIE_NAME'] = 'access_token_cookie'
     app.config['JWT_COOKIE_HTTPONLY'] = True
-    app.config['JWT_COOKIE_SAMESITE'] = 'Lax'
-    app.config['JWT_COOKIE_SECURE'] = False  # Set to False for development
+    app.config['JWT_COOKIE_SAMESITE'] = 'Lax' if is_dev else 'None'
+    app.config['JWT_COOKIE_SECURE'] = not is_dev  # Set to False for development
     app.config['JWT_COOKIE_CSRF_PROTECT'] = False  # Set to False for development
     app.config['JWT_COOKIE_DOMAIN'] = None  # Allow cookies to work on localhost
     app.config['JWT_ERROR_MESSAGE_KEY'] = 'message'
