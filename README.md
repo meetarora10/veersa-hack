@@ -14,6 +14,10 @@ A digitally enabled telehealth platform that ensures **instant, secure, and affo
 
 ## 📌 Problem Statement
 
+
+https://github.com/user-attachments/assets/57618533-4a8e-44ac-b7a3-d89801896ef6
+
+
 After the pandemic, access to quality healthcare from remote locations has become essential. The goal is to develop a telehealth solution that:
 
 - Provides **instant consultation** similar to an in-person experience.
