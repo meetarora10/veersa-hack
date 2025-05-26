@@ -19,7 +19,8 @@ def init_jwt(app):
     app.config['JWT_COOKIE_SECURE'] = True
     
     app.config['JWT_COOKIE_CSRF_PROTECT'] = not is_dev  # Keep False for development
-    app.config['JWT_COOKIE_DOMAIN'] = None  # Allow cookies to work on localhost
+    if is_dev:
+        app.config['JWT_COOKIE_DOMAIN'] = None
     app.config['JWT_ERROR_MESSAGE_KEY'] = 'message'
     app.config['JWT_JSON_KEY'] = 'access_token'  # Key to use in JSON responses
     app.config['JWT_HEADER_NAME'] = 'Authorization'  # Header name for JWT
