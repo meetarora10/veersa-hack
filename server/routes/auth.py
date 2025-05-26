@@ -151,7 +151,7 @@ def login():
                 access_token,
                 httponly=True,
                 secure=False if is_dev else True,  # False for HTTP in development
-                samesite=None if is_dev else 'Lax',  # None for cross-site in dev
+                samesite='None',  # None for cross-site in dev
                 max_age=86400,  # 1 day
                 path='/',
                 domain=None  # Allow cookie to work on localhost
