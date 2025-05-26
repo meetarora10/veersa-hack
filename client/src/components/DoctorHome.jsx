@@ -1,6 +1,8 @@
 import { format, isToday, isAfter, isBefore, addMinutes } from "date-fns";
+import { useNavigate } from "react-router-dom";
 
 const DoctorHome = ({ userProfile, appointments }) => {
+  const navigate = useNavigate();
   const now = new Date();
   const upcomingAppointments = appointments
     .filter(a => {
@@ -20,24 +22,48 @@ const DoctorHome = ({ userProfile, appointments }) => {
       isAfter(now, fiveMinBefore) &&
       isBefore(now, addMinutes(apptDateTime, 60));
   }
+
   const handleJoinCall = async () => {
-    const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/create-room`, {
-      method: 'POST',
-      credentials: "include",
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ appointment_id: nextAppointment.id }),
-    });
-    const data = await res.json();
-    if (data.data && data.data.url) {
-      const urlParts = data.data.url.split('/');
-      const roomId = urlParts[urlParts.length - 1];
-      navigate(`/meet/${roomId}`, { state: { meetingUrl: data.data.url, userRole: "doctor" } });
-    } else {
-      alert("Could not start meeting.");
+    if (!nextAppointment) {
+      alert("No upcoming appointment found.");
+      return;
+    }
+
+    try {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/create-room`, {
+        method: 'POST',
+        credentials: "include",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ appointment_id: String(nextAppointment.id) }),
+      });
+
+      const data = await res.json();
+      
+      if (data.success && data.data && data.data.url) {
+        const urlParts = data.data.url.split('/');
+        const roomId = urlParts[urlParts.length - 1];
+        navigate(`/meet/${roomId}`, { 
+          state: { 
+            meetingUrl: data.data.url, 
+            userRole: "doctor",
+            appointmentDetails: {
+              patientName: nextAppointment.patient,
+              appointmentTime: `${nextAppointment.date} ${nextAppointment.time}`,
+              appointmentId: nextAppointment.id
+            }
+          } 
+        });
+      } else {
+        alert(data.message || "Could not start meeting.");
+      }
+    } catch (error) {
+      console.error("Error joining call:", error);
+      alert("Failed to join the meeting. Please try again.");
     }
   };
+
   return (
     <div className="p-6 bg-white rounded-lg shadow-lg space-y-6">
       <div className="flex items-center justify-between flex-wrap gap-2">

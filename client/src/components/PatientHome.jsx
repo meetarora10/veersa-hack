@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { format, isToday, isAfter, isBefore, addMinutes } from "date-fns";
 import SearchDoctor from "../pages/SearchDoctor";
 
-const PatientHome = ({ userProfile, appointments= [] }) => {
+const PatientHome = ({ userProfile, appointments = [] }) => {
   const navigate = useNavigate();
   const now = new Date();
 
@@ -28,24 +28,43 @@ const PatientHome = ({ userProfile, appointments= [] }) => {
   }
 
   const handleJoinCall = async () => {
-    // Fetch/create a Daily.co room from backend
-    const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/create-room`, {
-      method: 'POST', 
-      credentials: "include",
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ appointment_id: nextAppointment.id }),
+    if (!nextAppointment) {
+      alert("No upcoming appointment found.");
+      return;
+    }
 
-    });
-    const data = await res.json();
-    // Use the correct path to the URL
-    if (data.data && data.data.url) {
-      const urlParts = data.data.url.split('/');
-      const roomId = urlParts[urlParts.length - 1];
-      navigate(`/meet/${roomId}`, { state: { meetingUrl: data.data.url, userRole: "patient" } });
-    } else {
-      alert("Could not start meeting.");
+    try {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/create-room`, {
+        method: 'POST',
+        credentials: "include",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ appointment_id: String(nextAppointment.id) }),
+      });
+
+      const data = await res.json();
+      
+      if (data.success && data.data && data.data.url) {
+        const urlParts = data.data.url.split('/');
+        const roomId = urlParts[urlParts.length - 1];
+        navigate(`/meet/${roomId}`, { 
+          state: { 
+            meetingUrl: data.data.url, 
+            userRole: "patient",
+            appointmentDetails: {
+              doctorName: nextAppointment.doctor,
+              appointmentTime: `${nextAppointment.date} ${nextAppointment.time}`,
+              appointmentId: nextAppointment.id
+            }
+          } 
+        });
+      } else {
+        alert(data.message || "Could not join meeting.");
+      }
+    } catch (error) {
+      console.error("Error joining call:", error);
+      alert("Failed to join the meeting. Please try again.");
     }
   };
 

@@ -5,11 +5,13 @@ import time
 import json
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from models.user import User
+from models.appointment import Appointment
 
 meeting_bp = Blueprint('meeting', __name__)
 
 DAILY_API_KEY = os.getenv("DAILY_API_KEY")
 appointment_rooms = {}
+
 @meeting_bp.route('/api/create-room', methods=['POST'])
 @jwt_required()
 def create_room():
@@ -24,13 +26,22 @@ def create_room():
             return jsonify({"success": False, "message": "User not found"}), 401
         
         data = flask_request.get_json()
-        appointment_id = data.get("appointment_id")
+        appointment_id = str(data.get("appointment_id"))
         if not appointment_id:
             return jsonify({"success": False, "message": "Appointment ID is required"}), 400
+
+        # Check if room already exists for this appointment
         if appointment_id in appointment_rooms:
             return jsonify({"success": True, "data": {"url": appointment_rooms[appointment_id]}}), 200
         
-        
+        # Verify appointment exists and user is authorized
+        appointment = Appointment.query.get(int(appointment_id))
+        if not appointment:
+            return jsonify({"success": False, "message": "Appointment not found"}), 404
+            
+        # Verify user is either the doctor or patient for this appointment
+        if str(appointment.doctor_id) != str(current_user_id) and str(appointment.patient_id) != str(current_user_id):
+            return jsonify({"success": False, "message": "Unauthorized access to this appointment"}), 403
 
         if not DAILY_API_KEY:
             print("Error: DAILY_API_KEY is not set")
@@ -62,7 +73,10 @@ def create_room():
         print("Daily API response:", resp.text)
 
         if resp.status_code == 200:
-            return jsonify({"success": True, "data": {"url": resp.json()["url"]}})
+            room_url = resp.json()["url"]
+            # Store the room URL for this appointment
+            appointment_rooms[appointment_id] = room_url
+            return jsonify({"success": True, "data": {"url": room_url}})
         else:
             error_msg = f"Daily API error: {resp.status_code} - {resp.text}"
             print(error_msg)
